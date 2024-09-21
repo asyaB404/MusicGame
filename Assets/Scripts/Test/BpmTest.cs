@@ -4,24 +4,22 @@ using UnityEngine.Serialization;
 
 public class BpmTest : MonoBehaviour
 {
-    [SerializeField] private AudioSource source;
+    [SerializeField] private AudioSource music;
+
+    [FormerlySerializedAs("source")] [SerializeField]
+    private AudioSource tick;
+
     [SerializeField] private float bpm;
 
     private void Start()
     {
-        DelayedTask().Forget(); // 使用 Forget 来处理异步任务
     }
 
-    private async UniTask DelayedTask()
-    {
-        await UniTask.Delay(3000);
-        InvokeRepeating(nameof(PlaySound), 60 / bpm, 4);
-    }
-
-    private void PlaySound()
-    {
-        source.Play();
-    }
+    // private async UniTask DelayedTask()
+    // {
+    //     await UniTask.Delay(3000);
+    //     InvokeRepeating(nameof(PlaySound), 60 / bpm, 4);
+    // }
 
     private bool _playing;
 
@@ -29,14 +27,19 @@ public class BpmTest : MonoBehaviour
     private void Repeat()
     {
         _playing = !_playing;
+        if (!_playing) return;
+        music.Play();
         RepeatTask().Forget();
     }
 
     private async UniTask RepeatTask()
     {
+        tick.pitch = 1f;
         while (_playing)
         {
-            PlaySound();
+            tick.Play();
+            tick.pitch += 1 / 3f;
+            if (tick.pitch > 2f) tick.pitch = 1;
             await UniTask.Delay(System.TimeSpan.FromSeconds(60 / bpm));
         }
     }
