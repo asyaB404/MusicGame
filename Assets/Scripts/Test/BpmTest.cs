@@ -11,16 +11,6 @@ public class BpmTest : MonoBehaviour
 
     [SerializeField] private float bpm;
 
-    private void Start()
-    {
-    }
-
-    // private async UniTask DelayedTask()
-    // {
-    //     await UniTask.Delay(3000);
-    //     InvokeRepeating(nameof(PlaySound), 60 / bpm, 4);
-    // }
-
     private bool _playing;
 
     [ContextMenu(nameof(Repeat))]
