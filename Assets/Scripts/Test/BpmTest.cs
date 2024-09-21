@@ -10,6 +10,7 @@ public class BpmTest : MonoBehaviour
     private AudioSource tick;
 
     [SerializeField] private float bpm;
+    [SerializeField] private float musicOffset;
 
     private bool _playing;
 
@@ -17,14 +18,21 @@ public class BpmTest : MonoBehaviour
     private void Repeat()
     {
         _playing = !_playing;
-        if (!_playing) return;
-        music.Play();
-        RepeatTask().Forget();
+        if (_playing)
+        {
+            music.Play();
+            RepeatTask().Forget();
+        }
+        else
+        {
+            music.Stop();
+        }
     }
 
     private async UniTask RepeatTask()
     {
         tick.pitch = 1f;
+        await UniTask.Delay(System.TimeSpan.FromSeconds(musicOffset));
         while (_playing)
         {
             tick.Play();
