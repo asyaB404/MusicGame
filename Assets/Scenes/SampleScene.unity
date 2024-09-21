@@ -1027,7 +1027,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: fec00bdf909db474cb9115c90f62ae2e, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 74b321f24786382448ca3a9ff25b0c82, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.346
   m_Pitch: 1
@@ -1159,7 +1159,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   music: {fileID: 1140112430}
   tick: {fileID: 493398315}
-  bpm: 96
+  bpm: 108
+  musicOffset: 1035
 --- !u!1 &2075870653
 GameObject:
   m_ObjectHideFlags: 0
