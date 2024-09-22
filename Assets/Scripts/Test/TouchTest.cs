@@ -6,7 +6,8 @@ public class TouchTest : MonoBehaviour
 {
     private Vector2 _lastPos = Vector2.zero;
     [SerializeField] private GameObject touchPrefab;
-    public List<Touch> nowTouches = new();
+    public readonly List<Touch> nowTouches = new();
+    private readonly Dictionary<int, GameObject> _touchObjsDict = new();
 
     private void Update()
     {
@@ -30,33 +31,36 @@ public class TouchTest : MonoBehaviour
 
 
 #elif UNITY_ANDROID || UNITY_IOS
-    // 在移动设备上使用真实的触摸输入
-    if (Input.touchCount > 0)
-    {
-        Touch touch = Input.GetTouch(0);
-        HandleTouch(touch);
-    }
+        // 在移动设备上使用真实的触摸输入
+        if (Input.touchCount > 0)
+        {
+            for (int i = 0; i < Input.touchCount; i++)
+            {
+                HandleTouch(Input.GetTouch(i));
+            }
+        }
 
 #elif UNITY_WEBGL
     // 在WebGL中可以支持触摸或鼠标输入
-    if (Input.touchCount > 0)
-    {
-        Touch touch = Input.GetTouch(0);
-        HandleTouch(touch);
-    }
-    else if (Input.GetMouseButton(0)) 
-    {
-        Vector2 mousePosition = Input.mousePosition;
-        SimulateTouch(mousePosition);
-    }
-
+        if (Input.touchCount > 0)
+        {
+            for (int i = 0; i < Input.touchCount; i++)
+            {
+                HandleTouch(Input.GetTouch(i));
+            }
+        }
+        else if (Input.GetMouseButton(0)) 
+        {
+            Vector2 mousePosition = Input.mousePosition;
+            SimulateTouch(mousePosition);
+        }
 #endif
     }
 
     private void SimulateTouch(Vector2 position, TouchPhase phase)
     {
         // 模拟触摸输入处理逻辑
-        Touch simulatedTouch = new Touch
+        var simulatedTouch = new Touch
         {
             fingerId = 0,
             position = position,
@@ -69,24 +73,36 @@ public class TouchTest : MonoBehaviour
 
     private void HandleTouch(Touch touch)
     {
+        Vector3 touchPos = Vector3.zero;
+        if (Camera.main != null)
+        {
+            touchPos = Camera.main.ScreenToWorldPoint(touch.position);
+        }
+
         switch (touch.phase)
         {
             case TouchPhase.Began:
-                Debug.Log("模拟触摸开始: " + touch.position);
+                Debug.Log("模拟触摸开始: " + touchPos);
                 nowTouches.Add(touch);
-                Instantiate(touchPrefab, touch.position, Quaternion.identity);
+                _touchObjsDict[touch.fingerId] = Instantiate(touchPrefab, touchPos, Quaternion.identity);
                 break;
             case TouchPhase.Moved:
-                Debug.Log("模拟触摸移动: " + touch.position);
+                Debug.Log("模拟触摸移动: " + touchPos);
+                _touchObjsDict[touch.fingerId].transform.position = touchPos;
                 break;
             case TouchPhase.Ended:
                 nowTouches.Remove(touch);
+                Destroy(_touchObjsDict[touch.fingerId]);
+                _touchObjsDict.Remove(touch.fingerId);
                 Debug.Log("模拟触摸结束");
                 break;
             case TouchPhase.Stationary:
                 break;
             case TouchPhase.Canceled:
                 nowTouches.Remove(touch);
+                Destroy(_touchObjsDict[touch.fingerId]);
+                _touchObjsDict.Remove(touch.fingerId);
+                Debug.Log("模拟触摸结束");
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
