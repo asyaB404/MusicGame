@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TouchTest : MonoBehaviour
 {
     private Vector2 _lastPos = Vector2.zero;
+    [SerializeField] private GameObject touchPrefab;
+    public List<Touch> nowTouches = new();
 
     private void Update()
     {
@@ -70,16 +73,20 @@ public class TouchTest : MonoBehaviour
         {
             case TouchPhase.Began:
                 Debug.Log("模拟触摸开始: " + touch.position);
+                nowTouches.Add(touch);
+                Instantiate(touchPrefab, touch.position, Quaternion.identity);
                 break;
             case TouchPhase.Moved:
                 Debug.Log("模拟触摸移动: " + touch.position);
                 break;
             case TouchPhase.Ended:
+                nowTouches.Remove(touch);
                 Debug.Log("模拟触摸结束");
                 break;
             case TouchPhase.Stationary:
                 break;
             case TouchPhase.Canceled:
+                nowTouches.Remove(touch);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
