@@ -18,8 +18,15 @@ namespace GamePlay
         [SerializeField] private float timer;
         public Chart curChart;
         [SerializeField] private int notesIndex;
-        private Queue<Note> _canHitNotesQueue;
+        private readonly Queue<Note> _canHitNotesQueue = new();
         public IReadOnlyCollection<Note> CanHitNotesQueue => _canHitNotesQueue;
+
+        public static GameManager Instance { get; private set; }
+
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         public void Start()
         {
@@ -37,7 +44,7 @@ namespace GamePlay
                 Note curChartNote = curChart.notes[notesIndex];
                 if (curChartNote.auto)
                 {
-                    ResolveAutoNote(curChartNote, curChartNote.beat - curBeat);
+                    ResolveAutoNote(curChartNote, 0, curChartNote.beat - curBeat);
                 }
                 else
                 {
@@ -60,15 +67,14 @@ namespace GamePlay
             }
         }
 
-        public void Hit(Touch touch)
-        {
-        }
-
         private void StartChart(Chart chart)
         {
+            curChart = chart;
+            bpm = chart.curBpm;
             isStart = true;
         }
 
+        [ContextMenu("重置")]
         private void Reset()
         {
             isStart = false;
@@ -77,14 +83,15 @@ namespace GamePlay
             notesIndex = 0;
         }
 
-        private async void ResolveAutoNote(Note note, float delay = 0)
+        public async void ResolveAutoNote(Note note, int pos = 0, float delay = 0)
         {
             if (delay > 0)
                 await UniTask.Delay(System.TimeSpan.FromSeconds(delay));
 
             switch (note)
             {
-                case SoundNote:
+                case SoundNote soundNote:
+                    Debug.Log(soundNote.soundType);
                     break;
                 case ChangeBpmNote:
                     break;
@@ -94,8 +101,9 @@ namespace GamePlay
             }
         }
 
-        private async void ResolveNote(float delay = 0)
+        public async void ResolveNote(int pos = 0, float delay = 0)
         {
+            if (_canHitNotesQueue.Count <= 0) return;
             if (delay > 0)
                 await UniTask.Delay(System.TimeSpan.FromSeconds(delay));
             Note note = _canHitNotesQueue.Peek();
@@ -104,9 +112,11 @@ namespace GamePlay
                 case TapNote:
                     if (Mathf.Abs(curBeat - note.beat) * (60 / bpm) <= notePrefectRange)
                     {
+                        Debug.Log("perfect");
                     }
                     else if (Mathf.Abs(curBeat - note.beat) * (60 / bpm) <= noteGreatRange)
                     {
+                        Debug.Log("great");
                     }
                     else
                     {
@@ -117,10 +127,22 @@ namespace GamePlay
             }
 
             Note dequeue = _canHitNotesQueue.Dequeue();
-            // if (dequeue != note)
-            // {
-            //     Debug.LogError("怎么回事");
-            // }
+            if (dequeue != note)
+            {
+                Debug.LogError("怎么回事");
+            }
         }
+
+        #region Debug
+
+        [ContextMenu("sampleStart")]
+        private void TestStart()
+        {
+            Reset();
+            var sampleChart = Chart.SampleChart();
+            StartChart(sampleChart);
+        }
+
+        #endregion
     }
 }

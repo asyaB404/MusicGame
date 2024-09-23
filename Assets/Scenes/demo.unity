@@ -269,6 +269,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1307268689}
+  - component: {fileID: 1307268691}
+  - component: {fileID: 1307268690}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -291,6 +293,45 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1307268690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1307268688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c624a73e2b54547924d79bef05ee5e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  touchPrefab: {fileID: 5003662658106737768, guid: fe4dac3387201f84487e2f8866acf1b3, type: 3}
+--- !u!114 &1307268691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1307268688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa8eb0892fc9f1b4698aa2f766f40b34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noteGreatRange: 0.2
+  notePrefectRange: 0.1
+  noteMissRange: 0.5
+  isStart: 0
+  combo: 0
+  bpm: 0
+  curBeat: 0
+  timer: 0
+  curChart:
+    offset: 0
+    musicLength: 0
+    totalBeat: 0
+    curBpm: 0
+  notesIndex: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -1,19 +1,5 @@
 namespace GamePlay.Notes
 {
-    public enum SoundType
-    {
-        Tick,
-        One,
-        Two,
-        Three,
-        Four,
-        Five,
-        Six,
-        Seven,
-        Tap,
-        
-    }
-
     [System.Serializable]
     public class SoundNote : Note
     {

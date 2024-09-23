@@ -14,7 +14,7 @@ public class Chart
     public static Chart SampleChart()
     {
         Chart chart = new Chart();
-        chart.curBpm = 120;
+        chart.curBpm = 90;
         chart.musicLength = 30f;
         chart.totalBeat = 60f;
         List<Note> notes = new List<Note>();

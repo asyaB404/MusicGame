@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using GamePlay;
 using UnityEngine;
 
 public class TouchSystem : MonoBehaviour
@@ -13,7 +14,6 @@ public class TouchSystem : MonoBehaviour
 
     private void Start()
     {
-        
     }
 
     private void Update()
@@ -87,6 +87,11 @@ public class TouchSystem : MonoBehaviour
             touchPos.z = 0;
         }
 
+        int handlePos = 0;
+        // if (touch.position.x < Screen.width / 2f)
+        //     handlePos = 0;
+        // else
+        //     handlePos = 1;
         switch (touch.phase)
         {
             case TouchPhase.Began:
@@ -96,6 +101,7 @@ public class TouchSystem : MonoBehaviour
                 o.transform.localScale = Vector3.zero;
                 o.transform.DOScale(1.25f, 0.1f);
                 _touchObjsDict[touch.fingerId] = o;
+                GameManager.Instance.ResolveNote(handlePos);
                 break;
             case TouchPhase.Moved:
                 Debug.Log("模拟触摸移动: " + touchPos);
