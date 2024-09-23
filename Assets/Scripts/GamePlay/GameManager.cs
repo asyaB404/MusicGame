@@ -38,29 +38,29 @@ namespace GamePlay
             if (!isStart) return;
             timer += Time.deltaTime;
             curBeat = timer * (bpm / 60);
-            for (int i = 0; i < _canHitNotesQueues.Count; i++)
+            for (int pos = 0; pos < _canHitNotesQueues.Count; pos++)
             {
-                while (curNotesIndexList[i] < curChart.notes.Count &&
-                       curBeat + noteMissRange * (bpm / 60) >= curChart.notes[curNotesIndexList[i]].beat)
+                while (curNotesIndexList[pos] < curChart.notes[pos].Count &&
+                       curBeat + noteMissRange * (bpm / 60) >= curChart.notes[pos][curNotesIndexList[pos]].beat)
                 {
-                    Note curChartNote = curChart.notes[curNotesIndexList[i]];
+                    Note curChartNote = curChart.notes[pos][curNotesIndexList[pos]];
                     if (curChartNote.auto)
                     {
                         ResolveAutoNote(curChartNote, 0, curChartNote.beat - curBeat);
                     }
                     else
                     {
-                        _canHitNotesQueues[i].Enqueue(curChart.notes[curNotesIndexList[i]]);
+                        _canHitNotesQueues[pos].Enqueue(curChart.notes[pos][curNotesIndexList[pos]]);
                     }
 
-                    curNotesIndexList[i]++;
+                    curNotesIndexList[pos]++;
                 }
 
-                while (_canHitNotesQueues.Count > 0 &&
-                       _canHitNotesQueues[i].Peek().beat + noteMissRange * (bpm / 60) <= curBeat)
+                while (_canHitNotesQueues[pos].Count > 0 &&
+                       _canHitNotesQueues[pos].Peek().beat + noteMissRange * (bpm / 60) <= curBeat)
                 {
                     Debug.Log("miss");
-                    _canHitNotesQueues[i].Dequeue();
+                    _canHitNotesQueues[pos].Dequeue();
                 }
             }
 
@@ -107,7 +107,7 @@ namespace GamePlay
 
         public async void ResolveNote(int pos = 0, float delay = 0)
         {
-            if (_canHitNotesQueues.Count <= 0) return;
+            if (_canHitNotesQueues[pos].Count <= 0) return;
             if (delay > 0)
                 await UniTask.Delay(System.TimeSpan.FromSeconds(delay));
             Note note = _canHitNotesQueues[pos].Peek();

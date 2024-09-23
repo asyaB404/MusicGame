@@ -39,14 +39,18 @@ namespace CustomChartEditor
             curBeat = timer * (bpm / 60);
         }
 
-        public void AddNote(Note note)
+        public void AddNote(int pos, Note note)
         {
-            curChart.notes.Add(note);
+            curChart.notes[pos].Add(note);
         }
 
         public Chart ExportChart()
         {
-            curChart.notes.Sort((note1, note2) => note1.beat.CompareTo(note2.beat));
+            for (int i = 0; i < curChart.notes.Count; i++)
+            {
+                curChart.notes[i].Sort((note1, note2) => note1.beat.CompareTo(note2.beat));
+            }
+
             return curChart;
         }
     }

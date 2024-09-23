@@ -8,23 +8,26 @@ public class Chart
     public float musicLength;
     public float totalBeat;
     public float curBpm;
-    public List<Note> notes;
+    public List<List<Note>> notes;
 
 
     public static Chart SampleChart()
     {
-        Chart chart = new Chart();
-        chart.curBpm = 90;
-        chart.musicLength = 30f;
-        chart.totalBeat = 60f;
-        List<Note> notes = new List<Note>();
-        AddTap7_th(notes, 0, 6);
-        AddTap7_th(notes, 0, 6 + 7);
-        AddTap7_th(notes, 0, 6 + 7 * 2);
-        AddTap7_th(notes, 0, 6 + 7 * 3);
-        AddTap7_th(notes, 0, 6 + 7 * 4, 0.5f);
-        AddTap7_th(notes, 0, 6 + 7 * 4.5f, 0.5f);
-        chart.notes = notes;
+        Chart chart = new Chart
+        {
+            curBpm = 90,
+            musicLength = 30f,
+            totalBeat = 60f,
+            notes = new List<List<Note>>() { new(), new() }
+        };
+        List<Note> notes0 = new List<Note>() { };
+        AddTap7_th(notes0, 0, 6);
+        AddTap7_th(notes0, 0, 6 + 7);
+        AddTap7_th(notes0, 0, 6 + 7 * 2);
+        AddTap7_th(notes0, 0, 6 + 7 * 3);
+        AddTap7_th(notes0, 0, 6 + 7 * 4, 0.5f);
+        AddTap7_th(notes0, 0, 6 + 7 * 4.5f, 0.5f);
+        chart.notes[0] = notes0;
         return chart;
     }
 
