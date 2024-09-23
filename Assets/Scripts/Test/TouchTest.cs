@@ -6,7 +6,7 @@ public class TouchTest : MonoBehaviour
 {
     private Vector2 _lastPos = Vector2.zero;
     [SerializeField] private GameObject touchPrefab;
-    public readonly List<Touch> nowTouches = new();
+    private readonly List<Touch> _nowTouches = new();
     private readonly Dictionary<int, GameObject> _touchObjsDict = new();
 
     private void Update()
@@ -77,13 +77,14 @@ public class TouchTest : MonoBehaviour
         if (Camera.main != null)
         {
             touchPos = Camera.main.ScreenToWorldPoint(touch.position);
+            touchPos.z = 0;
         }
 
         switch (touch.phase)
         {
             case TouchPhase.Began:
                 Debug.Log("模拟触摸开始: " + touchPos);
-                nowTouches.Add(touch);
+                _nowTouches.Add(touch);
                 _touchObjsDict[touch.fingerId] = Instantiate(touchPrefab, touchPos, Quaternion.identity);
                 break;
             case TouchPhase.Moved:
@@ -91,7 +92,7 @@ public class TouchTest : MonoBehaviour
                 _touchObjsDict[touch.fingerId].transform.position = touchPos;
                 break;
             case TouchPhase.Ended:
-                nowTouches.Remove(touch);
+                _nowTouches.Remove(touch);
                 Destroy(_touchObjsDict[touch.fingerId]);
                 _touchObjsDict.Remove(touch.fingerId);
                 Debug.Log("模拟触摸结束");
@@ -99,7 +100,7 @@ public class TouchTest : MonoBehaviour
             case TouchPhase.Stationary:
                 break;
             case TouchPhase.Canceled:
-                nowTouches.Remove(touch);
+                _nowTouches.Remove(touch);
                 Destroy(_touchObjsDict[touch.fingerId]);
                 _touchObjsDict.Remove(touch.fingerId);
                 Debug.Log("模拟触摸结束");
