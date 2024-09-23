@@ -47,11 +47,16 @@ namespace GamePlay
                 notesIndex++;
             }
 
-            while (notesIndex < curChart.notes.Count &&
-                   curBeat + noteMissRange * (bpm / 60) < _canHitNotesQueue.Peek().beat)
+            while (_canHitNotesQueue.Count > 0 &&
+                   _canHitNotesQueue.Peek().beat + noteMissRange * (bpm / 60) <= curBeat)
             {
                 Debug.Log("miss");
                 _canHitNotesQueue.Dequeue();
+            }
+
+            if (curBeat >= curChart.totalBeat)
+            {
+                Reset();
             }
         }
 
@@ -64,17 +69,12 @@ namespace GamePlay
             isStart = true;
         }
 
-        private void Init()
+        private void Reset()
         {
+            isStart = false;
             timer = 0;
             curBeat = 0;
             notesIndex = 0;
-        }
-
-        private void ReStart()
-        {
-            timer = 0;
-            curBeat = 0;
         }
 
         private async void ResolveAutoNote(Note note, float delay = 0)
@@ -96,14 +96,26 @@ namespace GamePlay
 
         private async void ResolveNote(float delay = 0)
         {
-            Note note = _canHitNotesQueue.Peek();
             if (delay > 0)
                 await UniTask.Delay(System.TimeSpan.FromSeconds(delay));
+            Note note = _canHitNotesQueue.Peek();
             switch (note)
             {
                 case TapNote:
+                    if (Mathf.Abs(curBeat - note.beat) * (60 / bpm) <= notePrefectRange)
+                    {
+                    }
+                    else if (Mathf.Abs(curBeat - note.beat) * (60 / bpm) <= noteGreatRange)
+                    {
+                    }
+                    else
+                    {
+                        Debug.Log("click_miss");
+                    }
+
                     break;
             }
+
             Note dequeue = _canHitNotesQueue.Dequeue();
             // if (dequeue != note)
             // {
