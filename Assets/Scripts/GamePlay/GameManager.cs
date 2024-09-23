@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using GamePlay.Notes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 namespace GamePlay
@@ -17,9 +18,8 @@ namespace GamePlay
         [SerializeField] private float curBeat;
         [SerializeField] private float timer;
         public Chart curChart;
-        [SerializeField] private int notesIndex;
-        private readonly Queue<Note> _canHitNotesQueue = new();
-        public IReadOnlyCollection<Note> CanHitNotesQueue => _canHitNotesQueue;
+        [SerializeField] private List<int> curNotesIndexList = new() { 0, 0 };
+        private readonly List<Queue<Note>> _canHitNotesQueues = new() { new Queue<Note>(), new Queue<Note>() };
 
         public static GameManager Instance { get; private set; }
 
@@ -38,28 +38,32 @@ namespace GamePlay
             if (!isStart) return;
             timer += Time.deltaTime;
             curBeat = timer * (bpm / 60);
-            while (notesIndex < curChart.notes.Count &&
-                   curBeat + noteMissRange * (bpm / 60) >= curChart.notes[notesIndex].beat)
+            for (int i = 0; i < _canHitNotesQueues.Count; i++)
             {
-                Note curChartNote = curChart.notes[notesIndex];
-                if (curChartNote.auto)
+                while (curNotesIndexList[i] < curChart.notes.Count &&
+                       curBeat + noteMissRange * (bpm / 60) >= curChart.notes[curNotesIndexList[i]].beat)
                 {
-                    ResolveAutoNote(curChartNote, 0, curChartNote.beat - curBeat);
-                }
-                else
-                {
-                    _canHitNotesQueue.Enqueue(curChart.notes[notesIndex]);
+                    Note curChartNote = curChart.notes[curNotesIndexList[i]];
+                    if (curChartNote.auto)
+                    {
+                        ResolveAutoNote(curChartNote, 0, curChartNote.beat - curBeat);
+                    }
+                    else
+                    {
+                        _canHitNotesQueues[i].Enqueue(curChart.notes[curNotesIndexList[i]]);
+                    }
+
+                    curNotesIndexList[i]++;
                 }
 
-                notesIndex++;
+                while (_canHitNotesQueues.Count > 0 &&
+                       _canHitNotesQueues[i].Peek().beat + noteMissRange * (bpm / 60) <= curBeat)
+                {
+                    Debug.Log("miss");
+                    _canHitNotesQueues[i].Dequeue();
+                }
             }
 
-            while (_canHitNotesQueue.Count > 0 &&
-                   _canHitNotesQueue.Peek().beat + noteMissRange * (bpm / 60) <= curBeat)
-            {
-                Debug.Log("miss");
-                _canHitNotesQueue.Dequeue();
-            }
 
             if (curBeat >= curChart.totalBeat)
             {
@@ -80,7 +84,7 @@ namespace GamePlay
             isStart = false;
             timer = 0;
             curBeat = 0;
-            notesIndex = 0;
+            curNotesIndexList = new List<int>() { 0, 0 };
         }
 
         public async void ResolveAutoNote(Note note, int pos = 0, float delay = 0)
@@ -103,10 +107,10 @@ namespace GamePlay
 
         public async void ResolveNote(int pos = 0, float delay = 0)
         {
-            if (_canHitNotesQueue.Count <= 0) return;
+            if (_canHitNotesQueues.Count <= 0) return;
             if (delay > 0)
                 await UniTask.Delay(System.TimeSpan.FromSeconds(delay));
-            Note note = _canHitNotesQueue.Peek();
+            Note note = _canHitNotesQueues[pos].Peek();
             switch (note)
             {
                 case TapNote:
@@ -126,7 +130,7 @@ namespace GamePlay
                     break;
             }
 
-            Note dequeue = _canHitNotesQueue.Dequeue();
+            Note dequeue = _canHitNotesQueues[pos].Dequeue();
             if (dequeue != note)
             {
                 Debug.LogError("怎么回事");

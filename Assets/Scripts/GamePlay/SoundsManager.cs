@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GamePlay
@@ -18,6 +19,7 @@ namespace GamePlay
     public class SoundsManager : MonoBehaviour
     {
         public static SoundsManager Instance { get; private set; }
+        public List<AudioClip> sounds = new();
 
         private void Awake()
         {

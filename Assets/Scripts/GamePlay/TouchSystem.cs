@@ -95,7 +95,6 @@ public class TouchSystem : MonoBehaviour
         switch (touch.phase)
         {
             case TouchPhase.Began:
-                Debug.Log("模拟触摸开始: " + touchPos);
                 _nowTouches.Add(touch);
                 GameObject o = Instantiate(touchPrefab, touchPos, Quaternion.identity);
                 o.transform.localScale = Vector3.zero;
@@ -104,7 +103,6 @@ public class TouchSystem : MonoBehaviour
                 GameManager.Instance.ResolveNote(handlePos);
                 break;
             case TouchPhase.Moved:
-                Debug.Log("模拟触摸移动: " + touchPos);
                 _touchObjsDict[touch.fingerId].transform.position = touchPos;
                 break;
             case TouchPhase.Ended:
@@ -126,6 +124,5 @@ public class TouchSystem : MonoBehaviour
         GameObject curTouchObj = _touchObjsDict[touch.fingerId];
         curTouchObj.GetComponent<SpriteRenderer>().DOFade(0, 0.1f).OnComplete(() => { Destroy(curTouchObj); });
         _touchObjsDict.Remove(touch.fingerId);
-        Debug.Log("模拟触摸结束");
     }
 }
