@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class TouchTest : MonoBehaviour
+public class TouchSystem : MonoBehaviour
 {
     private Vector2 _lastPos = Vector2.zero;
     [SerializeField] private GameObject touchPrefab;
@@ -13,7 +13,7 @@ public class TouchTest : MonoBehaviour
 
     private void Start()
     {
-        Application.targetFrameRate = 240;
+        
     }
 
     private void Update()
