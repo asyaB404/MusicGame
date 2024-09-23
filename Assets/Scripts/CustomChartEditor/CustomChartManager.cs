@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GamePlay.Notes;
 using UnityEngine;
@@ -9,11 +10,17 @@ namespace CustomChartEditor
         [SerializeField] private float offset;
         [SerializeField] private float bpm;
         [SerializeField] private AudioClip music;
-        [SerializeField] private float musicLength;
-        public float totalBeat;
-        public float curBpm;
+
+        [Space(20)] [Header("----------分割线----------")] [SerializeField]
+        private float musicLength;
+
+        [SerializeField] private bool isStart;
+        [SerializeField] private float curBeat;
+        [SerializeField] private float timer;
+        [SerializeField] private float totalBeat;
+        [SerializeField] private float curBpm;
+        [SerializeField] private Chart curChart;
         public List<Note> Notes = new();
-        public Chart curChart;
 
         [ContextMenu("导入歌曲并新建谱面")]
         public void CreateNewChart()
@@ -23,6 +30,13 @@ namespace CustomChartEditor
             curChart.curBpm = bpm;
             curChart.totalBeat = musicLength * (bpm / 60);
             curChart.offset = offset;
+        }
+
+        private void Update()
+        {
+            if (!isStart) return;
+            timer += Time.deltaTime;
+            curBeat = timer * (bpm / 60);
         }
 
         public void AddNote(Note note)
