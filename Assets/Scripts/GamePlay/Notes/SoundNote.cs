@@ -18,7 +18,7 @@ namespace GamePlay.Notes
     {
         public SoundType soundType;
 
-        public SoundNote(float beat, int pos, SoundType soundType) : base(beat, pos)
+        public SoundNote(float beat, int pos, SoundType soundType) : base(beat, pos, true)
         {
             this.soundType = soundType;
         }
