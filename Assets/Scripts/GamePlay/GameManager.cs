@@ -166,7 +166,8 @@ namespace GamePlay
                 case SoundNote soundNote:
                     Debug.Log(soundNote.soundType);
                     break;
-                case ChangeBpmNote:
+                case ChangeBpmNote changeBpmNote:
+                    bpm = changeBpmNote.targetBpm;
                     break;
                 default:
                     Debug.LogError("音符类型错误！");

@@ -8,7 +8,7 @@ public class Chart
     public float musicLength;
     public float totalBeat;
     public float curBpm;
-    public List<List<Note>> notes;
+    public List<List<Note>> notes = new();
 
 
     public static Chart SampleChart()
