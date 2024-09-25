@@ -4,15 +4,11 @@ using GamePlay.Notes;
 using UnityEngine;
 
 
+
 namespace GamePlay
 {
     public class GameManager : MonoBehaviour
     {
-        /// <summary>
-        /// 表示轨道数量
-        /// </summary>
-        public static int KeysCount = 2;
-
         /// <summary>
         /// Miss区间，音符进入该区间后将可进行判定（其实就是加入相应轨道的判定队列
         /// </summary>
@@ -49,18 +45,17 @@ namespace GamePlay
         /// <summary>
         /// 当前的谱面
         /// </summary>
-        public Chart curChart;
+        public ChartInfo curChart;
 
         /// <summary>
-        /// 从0开始，每个轨道将要加入的音符下标
+        /// 从0开始，每个轨道将要加入的音符下标，添加的速度和范围取决于noteMissRange
         /// </summary>
-        /// <example>例如一个谱面100个音符且平均分配时，歌曲处于一半的时候，该下标为50</example>
-        [SerializeField] private List<int> curNotesIndexList = new(KeysCount);
+        [SerializeField] private List<int> curNotesIndexList = new(ChartManager.KeysCount);
 
         /// <summary>
         /// 可以被判定的Note队列组
         /// </summary>
-        private readonly List<Queue<Note>> _canHitNotesQueues = new(KeysCount);
+        private readonly List<Queue<Note>> _canHitNotesQueues = new(ChartManager.KeysCount);
 
         /// <summary>
         /// 单例
@@ -70,12 +65,7 @@ namespace GamePlay
         private void Awake()
         {
             Instance = this;
-            // 初始化轨道列表，确保每个轨道都有一个初始索引和队列
-            for (int i = 0; i < KeysCount; i++)
-            {
-                curNotesIndexList.Add(0);
-                _canHitNotesQueues.Add(new Queue<Note>());
-            }
+            Reset();
         }
 
         public void Start()
@@ -133,11 +123,11 @@ namespace GamePlay
         /// <summary>
         /// 开始播放某个谱面
         /// </summary>
-        /// <param name="chart">要播放的谱面</param>
-        private void StartChart(Chart chart)
+        /// <param name="chartInfo">要播放的谱面</param>
+        private void StartChart(ChartInfo chartInfo)
         {
-            curChart = chart;
-            bpm = chart.curBpm;
+            curChart = chartInfo;
+            bpm = chartInfo.curBpm;
             isStart = true;
         }
 
@@ -147,7 +137,13 @@ namespace GamePlay
             isStart = false;
             timer = 0;
             curBeat = 0;
-            curNotesIndexList = new List<int>() { 0, 0 };
+            curNotesIndexList.Clear();
+            _canHitNotesQueues.Clear();
+            for (int i = 0; i < ChartManager.KeysCount; i++)
+            {
+                curNotesIndexList.Add(0);
+                _canHitNotesQueues.Add(new Queue<Note>());
+            }
         }
 
         /// <summary>
@@ -218,7 +214,7 @@ namespace GamePlay
         private void TestStart()
         {
             Reset();
-            var sampleChart = Chart.SampleChart();
+            var sampleChart = ChartInfo.SampleChart();
             StartChart(sampleChart);
         }
 

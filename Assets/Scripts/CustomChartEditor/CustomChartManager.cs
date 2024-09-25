@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using GamePlay.Notes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace CustomChartEditor
 {
@@ -19,17 +19,20 @@ namespace CustomChartEditor
         [SerializeField] private float timer;
         [SerializeField] private float totalBeat;
         [SerializeField] private float curBpm;
-        [SerializeField] private Chart curChart;
+
+        [FormerlySerializedAs("curChart")] [SerializeField]
+        private ChartInfo curChartInfo;
+
         public List<Note> Notes = new();
 
         [ContextMenu("导入歌曲并新建谱面")]
         public void CreateNewChart()
         {
             musicLength = music.length;
-            curChart.musicLength = musicLength;
-            curChart.curBpm = bpm;
-            curChart.totalBeat = musicLength * (bpm / 60);
-            curChart.offset = offset;
+            curChartInfo.musicLength = musicLength;
+            curChartInfo.curBpm = bpm;
+            curChartInfo.totalBeat = musicLength * (bpm / 60);
+            curChartInfo.offset = offset;
         }
 
         private void Update()
@@ -41,17 +44,17 @@ namespace CustomChartEditor
 
         public void AddNote(int pos, Note note)
         {
-            curChart.notes[pos].Add(note);
+            curChartInfo.notes[pos].Add(note);
         }
 
-        public Chart ExportChart()
+        public ChartInfo ExportChart()
         {
-            for (int i = 0; i < curChart.notes.Count; i++)
+            for (int i = 0; i < curChartInfo.notes.Count; i++)
             {
-                curChart.notes[i].Sort((note1, note2) => note1.beat.CompareTo(note2.beat));
+                curChartInfo.notes[i].Sort((note1, note2) => note1.beat.CompareTo(note2.beat));
             }
 
-            return curChart;
+            return curChartInfo;
         }
     }
 }

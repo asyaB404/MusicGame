@@ -6,20 +6,15 @@ namespace GamePlay
     public enum SoundType
     {
         Tick,
-        One,
-        Two,
-        Three,
-        Four,
-        Five,
-        Six,
-        Seven,
-        Tap,
+        Tap
     }
 
     public class SoundsManager : MonoBehaviour
     {
         public static SoundsManager Instance { get; private set; }
-        public List<AudioClip> sounds = new();
+        public IReadOnlyList<AudioClip> Sounds => sounds;
+        [SerializeField] private List<AudioClip> sounds = new();
+
 
         private void Awake()
         {
