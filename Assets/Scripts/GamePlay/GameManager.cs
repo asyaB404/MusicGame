@@ -4,10 +4,9 @@ using GamePlay.Notes;
 using UnityEngine;
 
 
-
 namespace GamePlay
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : MonoManager<GameManager>
     {
         /// <summary>
         /// Miss区间，音符进入该区间后将可进行判定（其实就是加入相应轨道的判定队列
@@ -52,14 +51,10 @@ namespace GamePlay
         /// </summary>
         private readonly List<Queue<Note>> _canHitNotesQueues = new(ChartManager.KeysCount);
 
-        /// <summary>
-        /// 单例
-        /// </summary>
-        public static GameManager Instance { get; private set; }
 
-        private void Awake()
+        protected override void Awake()
         {
-            Instance = this;
+            base.Awake();
             Reset();
         }
 
@@ -81,7 +76,8 @@ namespace GamePlay
             {
                 // 将已经进入判定区的音符加入队列
                 while (curNotesIndexList[pos] < ChartManager.Chart.notes[pos].Count &&
-                       curBeat + noteMissRange * (bpm / 60) >= ChartManager.Chart.notes[pos][curNotesIndexList[pos]].beat)
+                       curBeat + noteMissRange * (bpm / 60) >=
+                       ChartManager.Chart.notes[pos][curNotesIndexList[pos]].beat)
                 {
                     Note curChartNote = ChartManager.Chart.notes[pos][curNotesIndexList[pos]];
                     if (curChartNote.auto)
@@ -94,7 +90,7 @@ namespace GamePlay
                         // 将音符加入可判定队列
                         _canHitNotesQueues[pos].Enqueue(ChartManager.Chart.notes[pos][curNotesIndexList[pos]]);
                     }
-                    
+
                     // 更新音符下标
                     curNotesIndexList[pos]++;
                 }
@@ -154,7 +150,7 @@ namespace GamePlay
             switch (note)
             {
                 case SoundNote soundNote:
-                    Debug.Log(soundNote.soundType);
+                    Debug.Log("位于轨道" + pos + "的" + soundNote.soundType);
                     break;
                 case ChangeBpmNote changeBpmNote:
                     bpm = changeBpmNote.targetBpm;
@@ -173,9 +169,9 @@ namespace GamePlay
         public async void ResolveNote(int pos = 0, float delay = 0)
         {
             if (_canHitNotesQueues[pos].Count <= 0) return;
+            Note note = _canHitNotesQueues[pos].Dequeue();
             if (delay > 0)
                 await UniTask.Delay(System.TimeSpan.FromSeconds(delay));
-            Note note = _canHitNotesQueues[pos].Peek();
             switch (note)
             {
                 case TapNote:
@@ -193,12 +189,6 @@ namespace GamePlay
                     }
 
                     break;
-            }
-
-            Note dequeue = _canHitNotesQueues[pos].Dequeue();
-            if (dequeue != note)
-            {
-                Debug.LogError("怎么回事");
             }
         }
     }

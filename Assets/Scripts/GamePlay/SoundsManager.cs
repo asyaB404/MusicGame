@@ -9,16 +9,9 @@ namespace GamePlay
         Tap
     }
 
-    public class SoundsManager : MonoBehaviour
+    public class SoundsManager : MonoManager<SoundsManager>
     {
-        public static SoundsManager Instance { get; private set; }
         public IReadOnlyList<AudioClip> Sounds => sounds;
         [SerializeField] private List<AudioClip> sounds = new();
-
-
-        private void Awake()
-        {
-            Instance = this;
-        }
     }
 }

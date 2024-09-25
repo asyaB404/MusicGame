@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GamePlay
 {
-    public class NotesObjManager : MonoBehaviour
+    public class NotesObjManager : MonoManager<NotesObjManager>
     {
         [SerializeField] private List<int> curNotesGobjIndexList = new(ChartManager.KeysCount);
     }

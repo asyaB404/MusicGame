@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 
 namespace CustomChartEditor
 {
-    public class CustomChartManager : MonoBehaviour
+    public class CustomChartManager : MonoManager<CustomChartManager>
     {
         [SerializeField] private float offset;
         [SerializeField] private float bpm;

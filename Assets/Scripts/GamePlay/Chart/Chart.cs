@@ -5,6 +5,7 @@ using GamePlay.Notes;
 [System.Serializable]
 public class Chart
 {
+    public int keys;
     public float offset;
     public float musicLength;
     public float totalBeat;
@@ -16,6 +17,7 @@ public class Chart
     {
         Chart chart = new Chart
         {
+            keys = 2,
             curBpm = 90,
             musicLength = 30f,
             totalBeat = 60f,
