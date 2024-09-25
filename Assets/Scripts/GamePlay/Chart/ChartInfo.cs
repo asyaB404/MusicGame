@@ -3,7 +3,7 @@ using GamePlay.Notes;
 
 
 [System.Serializable]
-public class ChartInfo
+public class Chart
 {
     public float offset;
     public float musicLength;
@@ -12,9 +12,9 @@ public class ChartInfo
     public List<List<Note>> notes = new();
 
 
-    public static ChartInfo SampleChart()
+    public static Chart SampleChart()
     {
-        ChartInfo chartInfo = new ChartInfo
+        Chart chart = new Chart
         {
             curBpm = 90,
             musicLength = 30f,
@@ -28,8 +28,8 @@ public class ChartInfo
         AddTap7_th(notes0, 0, 6 + 7 * 3);
         AddTap7_th(notes0, 0, 6 + 7 * 4, 0.5f);
         AddTap7_th(notes0, 0, 6 + 7 * 4.5f, 0.5f);
-        chartInfo.notes[0] = notes0;
-        return chartInfo;
+        chart.notes[0] = notes0;
+        return chart;
     }
 
     private static void AddTap7_th(IList<Note> notes, int pos = 0, float start = 0, float duration = 1)

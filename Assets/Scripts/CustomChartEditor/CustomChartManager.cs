@@ -20,8 +20,8 @@ namespace CustomChartEditor
         [SerializeField] private float totalBeat;
         [SerializeField] private float curBpm;
 
-        [FormerlySerializedAs("curChart")] [SerializeField]
-        private ChartInfo curChartInfo;
+        [FormerlySerializedAs("curChartInfo")] [SerializeField]
+        private Chart curChart;
 
         public List<Note> Notes = new();
 
@@ -29,10 +29,10 @@ namespace CustomChartEditor
         public void CreateNewChart()
         {
             musicLength = music.length;
-            curChartInfo.musicLength = musicLength;
-            curChartInfo.curBpm = bpm;
-            curChartInfo.totalBeat = musicLength * (bpm / 60);
-            curChartInfo.offset = offset;
+            curChart.musicLength = musicLength;
+            curChart.curBpm = bpm;
+            curChart.totalBeat = musicLength * (bpm / 60);
+            curChart.offset = offset;
         }
 
         private void Update()
@@ -44,17 +44,17 @@ namespace CustomChartEditor
 
         public void AddNote(int pos, Note note)
         {
-            curChartInfo.notes[pos].Add(note);
+            curChart.notes[pos].Add(note);
         }
 
-        public ChartInfo ExportChart()
+        public Chart ExportChart()
         {
-            for (int i = 0; i < curChartInfo.notes.Count; i++)
+            for (int i = 0; i < curChart.notes.Count; i++)
             {
-                curChartInfo.notes[i].Sort((note1, note2) => note1.beat.CompareTo(note2.beat));
+                curChart.notes[i].Sort((note1, note2) => note1.beat.CompareTo(note2.beat));
             }
 
-            return curChartInfo;
+            return curChart;
         }
     }
 }

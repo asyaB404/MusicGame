@@ -43,11 +43,6 @@ namespace GamePlay
         [SerializeField] private float timer;
 
         /// <summary>
-        /// 当前的谱面
-        /// </summary>
-        public ChartInfo curChart;
-
-        /// <summary>
         /// 从0开始，每个轨道将要加入的音符下标，添加的速度和范围取决于noteMissRange
         /// </summary>
         [SerializeField] private List<int> curNotesIndexList = new(ChartManager.KeysCount);
@@ -85,10 +80,10 @@ namespace GamePlay
             for (int pos = 0; pos < _canHitNotesQueues.Count; pos++)
             {
                 // 将已经进入判定区的音符加入队列
-                while (curNotesIndexList[pos] < curChart.notes[pos].Count &&
-                       curBeat + noteMissRange * (bpm / 60) >= curChart.notes[pos][curNotesIndexList[pos]].beat)
+                while (curNotesIndexList[pos] < ChartManager.Chart.notes[pos].Count &&
+                       curBeat + noteMissRange * (bpm / 60) >= ChartManager.Chart.notes[pos][curNotesIndexList[pos]].beat)
                 {
-                    Note curChartNote = curChart.notes[pos][curNotesIndexList[pos]];
+                    Note curChartNote = ChartManager.Chart.notes[pos][curNotesIndexList[pos]];
                     if (curChartNote.auto)
                     {
                         // 处理自动播放音符
@@ -97,7 +92,7 @@ namespace GamePlay
                     else
                     {
                         // 将音符加入可判定队列
-                        _canHitNotesQueues[pos].Enqueue(curChart.notes[pos][curNotesIndexList[pos]]);
+                        _canHitNotesQueues[pos].Enqueue(ChartManager.Chart.notes[pos][curNotesIndexList[pos]]);
                     }
                     
                     // 更新音符下标
@@ -114,7 +109,7 @@ namespace GamePlay
             }
 
             // 若当前节拍已超过谱面总节拍，则重置游戏
-            if (curBeat >= curChart.totalBeat)
+            if (curBeat >= ChartManager.Chart.totalBeat)
             {
                 Reset();
             }
@@ -123,16 +118,15 @@ namespace GamePlay
         /// <summary>
         /// 开始播放某个谱面
         /// </summary>
-        /// <param name="chartInfo">要播放的谱面</param>
-        private void StartChart(ChartInfo chartInfo)
+        [ContextMenu("开始")]
+        public void StartGame()
         {
-            curChart = chartInfo;
-            bpm = chartInfo.curBpm;
+            bpm = ChartManager.Chart.curBpm;
             isStart = true;
         }
 
         [ContextMenu("重置")]
-        private void Reset()
+        public void Reset()
         {
             isStart = false;
             timer = 0;
@@ -207,17 +201,5 @@ namespace GamePlay
                 Debug.LogError("怎么回事");
             }
         }
-
-        #region Debug
-
-        [ContextMenu("sampleStart")]
-        private void TestStart()
-        {
-            Reset();
-            var sampleChart = ChartInfo.SampleChart();
-            StartChart(sampleChart);
-        }
-
-        #endregion
     }
 }
