@@ -7,6 +7,9 @@ using UnityEngine;
 public class TouchSystem : MonoBehaviour
 {
     private Vector2 _lastPos = Vector2.zero;
+    /// <summary>
+    /// 仅建议2D场景使用
+    /// </summary>
     public bool openTouchPrefab;
     [SerializeField] private GameObject touchPrefab;
     private readonly List<Touch> _nowTouches = new();
@@ -82,12 +85,12 @@ public class TouchSystem : MonoBehaviour
 
     private void HandleTouch(Touch touch)
     {
-        Vector3 touchPos = Vector3.zero;
+        Vector3 touchWorldPos = Vector3.zero;
         if (Camera.main != null)
         {
-            touchPos = Camera.main.ScreenToWorldPoint(touch.position);
-            Debug.Log(touchPos);
-            touchPos.z = 0;
+            touchWorldPos = Camera.main.ScreenToWorldPoint(touch.position);
+            Debug.Log(touchWorldPos);
+            touchWorldPos.z = 0;
         }
 
         int handlePos = 0;
@@ -98,21 +101,13 @@ public class TouchSystem : MonoBehaviour
         switch (touch.phase)
         {
             case TouchPhase.Began:
-                _nowTouches.Add(touch);
-                if (openTouchPrefab)
-                {
-                    GameObject o = Instantiate(touchPrefab, touchPos, Quaternion.identity);
-                    o.transform.localScale = Vector3.zero;
-                    o.transform.DOScale(1.25f, 0.1f);
-                    _touchObjsDict[touch.fingerId] = o;
-                }
-
+                SpawnTouch(touch,touchWorldPos);
                 GameManager.Instance.ResolveNote(handlePos);
                 break;
             case TouchPhase.Moved:
                 if (openTouchPrefab)
                 {
-                    _touchObjsDict[touch.fingerId].transform.position = touchPos;
+                    _touchObjsDict[touch.fingerId].transform.position = touchWorldPos;
                 }
 
                 break;
@@ -129,10 +124,19 @@ public class TouchSystem : MonoBehaviour
         }
     }
 
+    private void SpawnTouch(Touch touch,Vector2 worldPos){
+        _nowTouches.Add(touch);
+        if (!openTouchPrefab) return;
+        GameObject o = Instantiate(touchPrefab, worldPos, Quaternion.identity);
+        o.transform.localScale = Vector3.zero;
+        o.transform.DOScale(1.25f, 0.1f);
+        _touchObjsDict[touch.fingerId] = o;
+    }
+
     private void RemoveTouch(Touch touch)
     {
-        if (!openTouchPrefab) return;
         _nowTouches.Remove(touch);
+        if (!openTouchPrefab) return;
         GameObject curTouchObj = _touchObjsDict[touch.fingerId];
         curTouchObj.GetComponent<SpriteRenderer>().DOFade(0, 0.1f).OnComplete(() => { Destroy(curTouchObj); });
         _touchObjsDict.Remove(touch.fingerId);
