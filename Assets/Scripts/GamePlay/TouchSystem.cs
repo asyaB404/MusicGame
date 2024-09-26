@@ -66,6 +66,7 @@ public class TouchSystem : MonoBehaviour
 
     private void SimulateTouch(Vector2 position, TouchPhase phase)
     {
+        Debug.Log(position);
         // 模拟触摸输入处理逻辑
         var simulatedTouch = new Touch
         {
@@ -84,6 +85,7 @@ public class TouchSystem : MonoBehaviour
         if (Camera.main != null)
         {
             touchPos = Camera.main.ScreenToWorldPoint(touch.position);
+            Debug.Log(touchPos);
             touchPos.z = 0;
         }
 
