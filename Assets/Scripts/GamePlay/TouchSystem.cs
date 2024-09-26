@@ -7,6 +7,7 @@ using UnityEngine;
 public class TouchSystem : MonoBehaviour
 {
     private Vector2 _lastPos = Vector2.zero;
+    public bool openTouchPrefab;
     [SerializeField] private GameObject touchPrefab;
     private readonly List<Touch> _nowTouches = new();
     private readonly Dictionary<int, GameObject> _touchObjsDict = new();
@@ -98,14 +99,22 @@ public class TouchSystem : MonoBehaviour
         {
             case TouchPhase.Began:
                 _nowTouches.Add(touch);
-                GameObject o = Instantiate(touchPrefab, touchPos, Quaternion.identity);
-                o.transform.localScale = Vector3.zero;
-                o.transform.DOScale(1.25f, 0.1f);
-                _touchObjsDict[touch.fingerId] = o;
+                if (openTouchPrefab)
+                {
+                    GameObject o = Instantiate(touchPrefab, touchPos, Quaternion.identity);
+                    o.transform.localScale = Vector3.zero;
+                    o.transform.DOScale(1.25f, 0.1f);
+                    _touchObjsDict[touch.fingerId] = o;
+                }
+
                 GameManager.Instance.ResolveNote(handlePos);
                 break;
             case TouchPhase.Moved:
-                _touchObjsDict[touch.fingerId].transform.position = touchPos;
+                if (openTouchPrefab)
+                {
+                    _touchObjsDict[touch.fingerId].transform.position = touchPos;
+                }
+
                 break;
             case TouchPhase.Ended:
                 RemoveTouch(touch);
@@ -122,6 +131,7 @@ public class TouchSystem : MonoBehaviour
 
     private void RemoveTouch(Touch touch)
     {
+        if (!openTouchPrefab) return;
         _nowTouches.Remove(touch);
         GameObject curTouchObj = _touchObjsDict[touch.fingerId];
         curTouchObj.GetComponent<SpriteRenderer>().DOFade(0, 0.1f).OnComplete(() => { Destroy(curTouchObj); });
