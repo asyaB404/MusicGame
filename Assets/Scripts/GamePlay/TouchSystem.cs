@@ -92,7 +92,13 @@ public class TouchSystem : MonoBehaviour
             Debug.Log(touchWorldPos);
             touchWorldPos.z = 0;
         }
-
+        Ray ray = Camera.main.ScreenPointToRay(touch.position);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            Debug.Log("触摸位置: " + hit.point);
+            Debug.Log("触摸的碰撞体: " + hit.collider.gameObject.name);
+        }
         int handlePos = 0;
         // if (touch.position.x < Screen.width / 2f)
         //     handlePos = 0;
