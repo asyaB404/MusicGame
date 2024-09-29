@@ -9,6 +9,11 @@ namespace GamePlay
     public class GameManager : MonoManager<GameManager>
     {
         /// <summary>
+        /// 表示轨道数量
+        /// </summary>
+        public static int KeysCount { get; private set; } = 8;
+
+        /// <summary>
         /// Miss区间，音符进入该区间后将可进行判定（其实就是加入相应轨道的判定队列
         /// </summary>
         [SerializeField] private float noteMissRange;
@@ -24,6 +29,8 @@ namespace GamePlay
         [SerializeField] private float notePrefectRange;
 
         [SerializeField] private bool isStart;
+        public static bool IsStart => Instance.isStart;
+
         [SerializeField] private int combo;
 
         /// <summary>
@@ -31,10 +38,14 @@ namespace GamePlay
         /// </summary>
         [SerializeField] private float bpm;
 
+        public static float Bpm => Bpm;
+
         /// <summary>
         /// 当前位于的节拍
         /// </summary>
         [SerializeField] private float curBeat;
+
+        public static float CurBeat => Instance.curBeat;
 
         /// <summary>
         /// 计时器，记录当前的时间
@@ -44,18 +55,18 @@ namespace GamePlay
         /// <summary>
         /// 从0开始，每个轨道将要加入的音符下标，添加的速度和范围取决于noteMissRange
         /// </summary>
-        [SerializeField] private List<int> curNotesIndexList = new(ChartManager.KeysCount);
+        [SerializeField] private List<int> curNotesIndexList = new(KeysCount);
 
         /// <summary>
         /// 可以被判定的Note队列组
         /// </summary>
-        private readonly List<Queue<Note>> _canHitNotesQueues = new(ChartManager.KeysCount);
+        private readonly List<Queue<Note>> _canHitNotesQueues = new(KeysCount);
 
 
         protected override void Awake()
         {
             base.Awake();
-            Reset();
+            StateReset();
         }
 
         public void Start()
@@ -107,7 +118,7 @@ namespace GamePlay
             // 若当前节拍已超过谱面总节拍，则重置游戏
             if (curBeat >= ChartManager.Chart.totalBeat)
             {
-                Reset();
+                StateReset();
             }
         }
 
@@ -118,18 +129,20 @@ namespace GamePlay
         public void StartGame()
         {
             bpm = ChartManager.Chart.curBpm;
+            KeysCount = ChartManager.Chart.keys;
             isStart = true;
         }
 
         [ContextMenu("重置")]
-        public void Reset()
+        public void StateReset()
         {
             isStart = false;
             timer = 0;
             curBeat = 0;
             curNotesIndexList.Clear();
             _canHitNotesQueues.Clear();
-            for (int i = 0; i < ChartManager.KeysCount; i++)
+            NotesObjManager.Instance.StateReset();
+            for (int i = 0; i < KeysCount; i++)
             {
                 curNotesIndexList.Add(0);
                 _canHitNotesQueues.Add(new Queue<Note>());

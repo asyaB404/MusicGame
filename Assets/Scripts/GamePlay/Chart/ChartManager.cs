@@ -3,12 +3,11 @@ using UnityEngine;
 
 public class ChartManager : MonoManager<ChartManager>
 {
-    /// <summary>
-    /// 表示轨道数量
-    /// </summary>
-    public static int KeysCount { get; private set; } = 2;
-
-    public static Chart Chart => Instance.chart;
+    public static Chart Chart
+    {
+        get => Instance.chart;
+        set => Instance.chart = value;
+    }
 
     [SerializeField] private Chart chart;
 
@@ -18,7 +17,7 @@ public class ChartManager : MonoManager<ChartManager>
     [ContextMenu("sampleStart")]
     private void TestStart()
     {
-        GameManager.Instance.Reset();
+        GameManager.Instance.StateReset();
         chart = Chart.SampleChart();
         GameManager.Instance.StartGame();
     }
