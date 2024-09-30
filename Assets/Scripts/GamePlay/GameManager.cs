@@ -200,7 +200,6 @@ namespace GamePlay
                     {
                         Debug.Log("click_miss");
                     }
-
                     break;
             }
         }
