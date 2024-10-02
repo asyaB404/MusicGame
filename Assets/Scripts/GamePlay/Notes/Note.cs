@@ -3,6 +3,7 @@ namespace GamePlay.Notes
     [System.Serializable]
     public abstract class Note
     {
+        public int id;
         public float beat;
         public int pos;
         public bool auto;

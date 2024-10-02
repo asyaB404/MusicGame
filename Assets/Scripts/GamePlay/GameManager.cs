@@ -91,6 +91,7 @@ namespace GamePlay
                        ChartManager.Chart.notes[pos][curNotesIndexList[pos]].beat)
                 {
                     Note curChartNote = ChartManager.Chart.notes[pos][curNotesIndexList[pos]];
+                    curChartNote.id = curNotesIndexList[pos];
                     if (curChartNote.auto)
                     {
                         // 处理自动播放音符
@@ -141,12 +142,13 @@ namespace GamePlay
             curBeat = 0;
             curNotesIndexList.Clear();
             _canHitNotesQueues.Clear();
-            NotesObjManager.Instance.StateReset();
             for (int i = 0; i < KeysCount; i++)
             {
                 curNotesIndexList.Add(0);
                 _canHitNotesQueues.Add(new Queue<Note>());
             }
+
+            NotesObjManager.Instance.StateReset();
         }
 
         /// <summary>
@@ -183,7 +185,7 @@ namespace GamePlay
         {
             if (_canHitNotesQueues[pos].Count <= 0) return;
             Note note = _canHitNotesQueues[pos].Dequeue();
-            NotesObjManager.Instance.ResolveNote(pos);
+            NotesObjManager.Instance.ResolveNote(note, pos);
             switch (note)
             {
                 case TapNote:
@@ -199,6 +201,7 @@ namespace GamePlay
                     {
                         Debug.Log("click_miss");
                     }
+
                     break;
             }
         }
