@@ -31,7 +31,6 @@ namespace GamePlay
             if (!GameManager.IsStart) return;
             for (int pos = 0; pos < curNotesGobjIndexList.Count; pos++)
             {
-                // 将已经进入判定区的音符加入队列
                 while (curNotesGobjIndexList[pos] < ChartManager.Chart.notes[pos].Count &&
                        GameManager.CurBeat + _spawnTime >=
                        ChartManager.Chart.notes[pos][curNotesGobjIndexList[pos]].beat)
@@ -49,7 +48,9 @@ namespace GamePlay
                             TapNote => 0,
                             _ => 0
                         };
+                        var startPos = new Vector3(0, 4);
                         noteObj = Instantiate(notePrefabs[i],keysParents[pos],false);
+                        noteObj.transform.localPosition = startPos;
                         noteObj.transform.DOLocalMoveY(-4, 3.7f / _spawnTime).SetSpeedBased();
                         noteObj.name = curNotesGobjIndexList[pos].ToString();
                         _notesGobjQueues[pos].Enqueue(noteObj);

@@ -1665,9 +1665,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1307268689}
+  - component: {fileID: 1307268693}
   - component: {fileID: 1307268691}
-  - component: {fileID: 1307268690}
   - component: {fileID: 1307268692}
+  - component: {fileID: 1307268690}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -1716,9 +1717,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8eb0892fc9f1b4698aa2f766f40b34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteMissRange: 0.5
-  noteGreatRange: 0.2
-  notePrefectRange: 0.1
+  noteMissRange: 0.15
+  noteGreatRange: 0.1
+  notePrefectRange: 0.06
   isStart: 0
   combo: 0
   bpm: 0
@@ -1749,7 +1750,25 @@ MonoBehaviour:
   - {fileID: 2097226832}
   - {fileID: 865815907}
   curNotesGobjIndexList: 
-  speed: 0
+  speed: 6
+--- !u!114 &1307268693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1307268688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6139b14e3b424dee9f907f8394a77121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chart:
+    keys: 0
+    offset: 0
+    musicLength: 0
+    totalBeat: 0
+    curBpm: 0
 --- !u!1 &1497443915
 GameObject:
   m_ObjectHideFlags: 0
@@ -2574,6 +2593,10 @@ PrefabInstance:
     - target: {fileID: 4581810390214727657, guid: e112fdc5e7fd3a04aa424fac88646458, type: 3}
       propertyPath: m_Name
       value: groundKey
+      objectReference: {fileID: 0}
+    - target: {fileID: 5224580534395338645, guid: e112fdc5e7fd3a04aa424fac88646458, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

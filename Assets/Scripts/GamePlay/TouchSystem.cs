@@ -70,7 +70,6 @@ public class TouchSystem : MonoBehaviour
 
     private void SimulateTouch(Vector2 position, TouchPhase phase)
     {
-        Debug.Log(position);
         // 模拟触摸输入处理逻辑
         var simulatedTouch = new Touch
         {
@@ -89,15 +88,14 @@ public class TouchSystem : MonoBehaviour
         if (Camera.main != null)
         {
             touchWorldPos = Camera.main.ScreenToWorldPoint(touch.position);
-            Debug.Log(touchWorldPos);
             touchWorldPos.z = 0;
         }
         Ray ray = Camera.main.ScreenPointToRay(touch.position);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            Debug.Log("触摸位置: " + hit.point);
-            Debug.Log("触摸的碰撞体: " + hit.collider.gameObject.name);
+            // Debug.Log("触摸位置: " + hit.point);
+            // Debug.Log("触摸的碰撞体: " + hit.collider.gameObject.name);
         }
         int handlePos = 0;
         // if (touch.position.x < Screen.width / 2f)

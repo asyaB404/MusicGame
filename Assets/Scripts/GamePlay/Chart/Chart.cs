@@ -21,7 +21,7 @@ public class Chart
             curBpm = 90,
             musicLength = 30f,
             totalBeat = 60f,
-            notes = new List<List<Note>>() { new(), new() }
+            notes = new List<List<Note>>() { new(), new(), new(), new(), new(), new(), new(), new() }
         };
         List<Note> notes0 = new List<Note>() { };
         AddTap7_th(notes0, 0, 6);
@@ -38,7 +38,7 @@ public class Chart
     {
         for (int i = 0; i < 6; i++)
         {
-            notes.Add(new SoundNote(start + duration * i, pos));
+            notes.Add(new TapNote(start + duration * i, pos));
         }
 
         notes.Add(new TapNote(start + duration * 6, pos));
