@@ -179,12 +179,11 @@ namespace GamePlay
         /// </summary>
         /// <param name="pos">轨道位置</param>
         /// <param name="delay">延迟执行时间</param>
-        public async void ResolveNote(int pos = 0, float delay = 0)
+        public void ResolveNote(int pos = 0)
         {
             if (_canHitNotesQueues[pos].Count <= 0) return;
             Note note = _canHitNotesQueues[pos].Dequeue();
-            if (delay > 0)
-                await UniTask.Delay(System.TimeSpan.FromSeconds(delay));
+            NotesObjManager.Instance.ResolveNote(pos);
             switch (note)
             {
                 case TapNote:
