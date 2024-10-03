@@ -63,7 +63,7 @@ namespace GamePlay
                        _notesGobjQueues[pos].Peek().transform.localPosition.y <= 0)
                 {
                     Debug.Log("destroy");
-                    _notesGobjQueues[pos].Dequeue();
+                    Destroy(_notesGobjQueues[pos].Dequeue());
                 }
             }
         }
