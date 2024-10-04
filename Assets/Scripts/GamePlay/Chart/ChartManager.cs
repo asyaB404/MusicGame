@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ChartManager : MonoManager<ChartManager>
 {
-    public static Chart Chart
+    public static Chart CurChart
     {
         get => Instance.chart;
         set => Instance.chart = value;
@@ -17,7 +17,6 @@ public class ChartManager : MonoManager<ChartManager>
     [ContextMenu("sampleStart")]
     private void TestStart()
     {
-        GameManager.Instance.StateReset();
         chart = Chart.SampleChart();
         GameManager.Instance.StartGame();
     }

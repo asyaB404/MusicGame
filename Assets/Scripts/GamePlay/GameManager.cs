@@ -38,7 +38,6 @@ namespace GamePlay
         /// </summary>
         [SerializeField] private float bpm;
 
-        public static float Bpm => Bpm;
 
         /// <summary>
         /// 当前位于的节拍
@@ -55,19 +54,13 @@ namespace GamePlay
         /// <summary>
         /// 从0开始，每个轨道将要加入的音符下标，添加的速度和范围取决于noteMissRange
         /// </summary>
-        [SerializeField] private List<int> curNotesIndexList = new(KeysCount);
+        [SerializeField] private List<int> curNotesIndexList;
 
         /// <summary>
         /// 可以被判定的Note队列组
         /// </summary>
-        private readonly List<Queue<Note>> _canHitNotesQueues = new(KeysCount);
+        private List<Queue<Note>> _canHitNotesQueues;
 
-
-        protected override void Awake()
-        {
-            base.Awake();
-            StateReset();
-        }
 
         public void Start()
         {
@@ -86,11 +79,11 @@ namespace GamePlay
             for (int pos = 0; pos < _canHitNotesQueues.Count; pos++)
             {
                 // 将已经进入判定区的音符加入队列
-                while (curNotesIndexList[pos] < ChartManager.Chart.notes[pos].Count &&
+                while (curNotesIndexList[pos] < ChartManager.CurChart.notes[pos].Count &&
                        curBeat + noteMissRange * (bpm / 60) >=
-                       ChartManager.Chart.notes[pos][curNotesIndexList[pos]].beat)
+                       ChartManager.CurChart.notes[pos][curNotesIndexList[pos]].beat)
                 {
-                    Note curChartNote = ChartManager.Chart.notes[pos][curNotesIndexList[pos]];
+                    Note curChartNote = ChartManager.CurChart.notes[pos][curNotesIndexList[pos]];
                     curChartNote.id = curNotesIndexList[pos];
                     if (curChartNote.auto)
                     {
@@ -100,7 +93,7 @@ namespace GamePlay
                     else
                     {
                         // 将音符加入可判定队列
-                        _canHitNotesQueues[pos].Enqueue(ChartManager.Chart.notes[pos][curNotesIndexList[pos]]);
+                        _canHitNotesQueues[pos].Enqueue(ChartManager.CurChart.notes[pos][curNotesIndexList[pos]]);
                     }
 
                     // 更新音符下标
@@ -117,7 +110,7 @@ namespace GamePlay
             }
 
             // 若当前节拍已超过谱面总节拍，则重置游戏
-            if (curBeat >= ChartManager.Chart.totalBeat)
+            if (curBeat >= ChartManager.CurChart.totalBeat)
             {
                 StateReset();
             }
@@ -129,8 +122,9 @@ namespace GamePlay
         [ContextMenu("开始")]
         public void StartGame()
         {
-            bpm = ChartManager.Chart.curBpm;
-            KeysCount = ChartManager.Chart.keys;
+            bpm = ChartManager.CurChart.curBpm;
+            KeysCount = ChartManager.CurChart.keys;
+            StateReset();
             isStart = true;
         }
 
@@ -140,8 +134,8 @@ namespace GamePlay
             isStart = false;
             timer = 0;
             curBeat = 0;
-            curNotesIndexList.Clear();
-            _canHitNotesQueues.Clear();
+            curNotesIndexList = new List<int>(KeysCount);
+            _canHitNotesQueues = new List<Queue<Note>>(KeysCount);
             for (int i = 0; i < KeysCount; i++)
             {
                 curNotesIndexList.Add(0);
@@ -183,7 +177,8 @@ namespace GamePlay
         /// <param name="delay">延迟执行时间</param>
         public void ResolveNote(int pos = 0)
         {
-            if (_canHitNotesQueues[pos].Count <= 0) return;
+            if (_canHitNotesQueues?[pos] == null ||
+                _canHitNotesQueues[pos].Count <= 0) return;
             Note note = _canHitNotesQueues[pos].Dequeue();
             NotesObjManager.Instance.ResolveNote(note, pos);
             switch (note)
@@ -191,11 +186,11 @@ namespace GamePlay
                 case TapNote:
                     if (Mathf.Abs(curBeat - note.beat) * (60 / bpm) <= notePrefectRange)
                     {
-                        Debug.Log("perfect");
+                        NotesObjManager.Instance.PlayEffect(pos, 0);
                     }
                     else if (Mathf.Abs(curBeat - note.beat) * (60 / bpm) <= noteGreatRange)
                     {
-                        Debug.Log("great");
+                        NotesObjManager.Instance.PlayEffect(pos, 1);
                     }
                     else
                     {
