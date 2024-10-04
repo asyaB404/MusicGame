@@ -181,14 +181,16 @@ namespace GamePlay
                 _canHitNotesQueues[pos].Count <= 0) return;
             Note note = _canHitNotesQueues[pos].Dequeue();
             NotesObjManager.Instance.ResolveNote(note, pos);
+            var abs = Mathf.Abs(curBeat - note.beat) * (60 / bpm);
+            Debug.Log(abs);
             switch (note)
             {
                 case TapNote:
-                    if (Mathf.Abs(curBeat - note.beat) * (60 / bpm) <= notePrefectRange)
+                    if (abs <= notePrefectRange)
                     {
                         NotesObjManager.Instance.PlayEffect(pos, 0);
                     }
-                    else if (Mathf.Abs(curBeat - note.beat) * (60 / bpm) <= noteGreatRange)
+                    else if (abs <= noteGreatRange)
                     {
                         NotesObjManager.Instance.PlayEffect(pos, 1);
                     }
