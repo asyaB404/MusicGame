@@ -192,7 +192,9 @@ MonoBehaviour:
   - {fileID: 2097226833}
   - {fileID: 865815908}
   curNotesGobjIndexList: 
-  speed: 6
+  speed: 5
+  preSpawnTime: 0
+  noteSpeed: 0
 --- !u!4 &31419850 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3003603095546033581, guid: e112fdc5e7fd3a04aa424fac88646458, type: 3}

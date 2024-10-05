@@ -38,7 +38,7 @@ public class Chart
     {
         for (int i = 0; i < 6; i++)
         {
-            notes.Add(new TapNote(start + duration * i, pos,true));
+            notes.Add(new TapNote(start + duration * i, pos));
         }
 
         notes.Add(new TapNote(start + duration * 6, pos));

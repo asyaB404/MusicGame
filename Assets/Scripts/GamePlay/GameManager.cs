@@ -75,14 +75,14 @@ namespace GamePlay
             if (!isStart) return;
             timer += Time.deltaTime;
             // 更新当前的节拍数
-            curBeat = timer * (bpm / 60);
+            curBeat = timer * (bpm / 60f);
 
             // 遍历每个轨道的音符队列
             for (int pos = 0; pos < _canHitNotesQueues.Count; pos++)
             {
                 // 将已经进入判定区的音符加入队列
                 while (curNotesIndexList[pos] < ChartManager.CurChart.notes[pos].Count &&
-                       curBeat + noteMissRange * (bpm / 60) >=
+                       curBeat + noteMissRange * (bpm / 60f) >=
                        ChartManager.CurChart.notes[pos][curNotesIndexList[pos]].beat)
                 {
                     Note curChartNote = ChartManager.CurChart.notes[pos][curNotesIndexList[pos]];
@@ -104,7 +104,7 @@ namespace GamePlay
 
                 // 检查可打击的音符中是否有Miss，有则移除
                 while (_canHitNotesQueues[pos].Count > 0 &&
-                       _canHitNotesQueues[pos].Peek().beat + noteMissRange * (bpm / 60) <= curBeat)
+                       _canHitNotesQueues[pos].Peek().beat + noteMissRange * (bpm / 60f) <= curBeat)
                 {
                     _canHitNotesQueues[pos].Dequeue();
                 }
@@ -184,8 +184,8 @@ namespace GamePlay
                 _canHitNotesQueues[pos].Count <= 0) return;
             Note note = _canHitNotesQueues[pos].Dequeue();
             NotesObjManager.Instance.ResolveNote(note, pos);
-            var abs = Mathf.Abs(curBeat - note.beat) * (60 / bpm);
-            Debug.Log(abs);
+            var abs = Mathf.Abs(curBeat - note.beat) * (60f / bpm);
+            Debug.Log((curBeat - note.beat) * (60f / bpm));
             switch (note)
             {
                 case TapNote:

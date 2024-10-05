@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using GamePlay.Notes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace GamePlay
 {
@@ -13,13 +14,13 @@ namespace GamePlay
         [SerializeField] private List<int> curNotesGobjIndexList = new(GameManager.KeysCount);
         private readonly List<Queue<GameObject>> _notesGobjQueues = new(GameManager.KeysCount);
         public float speed;
-        private float _preSpawnTime;
-        private float _noteSpeed;
+        [SerializeField] private float preSpawnTime;
+        [SerializeField] private float noteSpeed;
 
         public void StateReset()
         {
-            _preSpawnTime = 5 / speed;
-            _noteSpeed = 3.7f / _preSpawnTime;
+            preSpawnTime = 5 / speed;
+            noteSpeed = 3.7f / preSpawnTime;
             curNotesGobjIndexList.Clear();
             _notesGobjQueues.Clear();
             for (int i = 0; i < GameManager.KeysCount; i++)
@@ -48,12 +49,12 @@ namespace GamePlay
 
         private void SpawnNotes(int pos, List<Note> notes, ref int currentNoteIndex)
         {
-            float adjustedCurBeat = GameManager.CurBeat + _preSpawnTime * (GameManager.Bpm / 60);
+            float adjustedCurBeat = GameManager.CurBeat + preSpawnTime * (GameManager.Bpm / 60f);
             while (currentNoteIndex < notes.Count &&
                    adjustedCurBeat >= notes[currentNoteIndex].beat)
             {
                 var curChartNote = notes[currentNoteIndex];
-                float offset = (adjustedCurBeat - notes[currentNoteIndex].beat) * (60 / GameManager.Bpm);
+                float offset = (adjustedCurBeat - notes[currentNoteIndex].beat) * (60f / GameManager.Bpm);
 
                 if (curChartNote is not ChartEvent)
                 {
@@ -75,14 +76,14 @@ namespace GamePlay
                 // SoundNote => 1, // SoundNote 类型
                 _ => 0 // ???
             };
-            var startPos = new Vector3(0, 4 - offset * _noteSpeed);
+            var startPos = new Vector3(0, 4 - offset * noteSpeed);
 
             // 生成音符对象
             GameObject noteObj = Instantiate(notePrefabs[i], keysParents[pos], false);
             noteObj.transform.localPosition = startPos;
 
             // 音符移动动画
-            noteObj.transform.DOLocalMoveY(-4, _noteSpeed).SetSpeedBased();
+            noteObj.transform.DOLocalMoveY(-400, noteSpeed / 2).SetSpeedBased();
             noteObj.name = noteIndex.ToString();
 
             _notesGobjQueues[pos].Enqueue(noteObj);
