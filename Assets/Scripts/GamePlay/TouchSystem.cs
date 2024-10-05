@@ -7,10 +7,12 @@ using UnityEngine;
 public class TouchSystem : MonoBehaviour
 {
     private Vector2 _lastPos = Vector2.zero;
+
     /// <summary>
     /// 仅建议2D场景使用
     /// </summary>
     public bool openTouchPrefab;
+
     [SerializeField] private GameObject touchPrefab;
     private readonly List<Touch> _nowTouches = new();
     private readonly Dictionary<int, GameObject> _touchObjsDict = new();
@@ -90,14 +92,16 @@ public class TouchSystem : MonoBehaviour
             touchWorldPos = Camera.main.ScreenToWorldPoint(touch.position);
             touchWorldPos.z = 0;
         }
+
+        int handlePos = 0;
         Ray ray = Camera.main.ScreenPointToRay(touch.position);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            // Debug.Log("触摸位置: " + hit.point);
-            // Debug.Log("触摸的碰撞体: " + hit.collider.gameObject.name);
+            handlePos = NotesObjManager.Instance.KeyToPos[hit.collider];
+            Debug.Log(handlePos);
         }
-        int handlePos = 0;
+
         // if (touch.position.x < Screen.width / 2f)
         //     handlePos = 0;
         // else
@@ -105,7 +109,7 @@ public class TouchSystem : MonoBehaviour
         switch (touch.phase)
         {
             case TouchPhase.Began:
-                SpawnTouch(touch,touchWorldPos);
+                SpawnTouch(touch, touchWorldPos);
                 GameManager.Instance.ResolveNote(handlePos);
                 break;
             case TouchPhase.Moved:
@@ -128,7 +132,8 @@ public class TouchSystem : MonoBehaviour
         }
     }
 
-    private void SpawnTouch(Touch touch,Vector2 worldPos){
+    private void SpawnTouch(Touch touch, Vector2 worldPos)
+    {
         _nowTouches.Add(touch);
         if (!openTouchPrefab) return;
         GameObject o = Instantiate(touchPrefab, worldPos, Quaternion.identity);

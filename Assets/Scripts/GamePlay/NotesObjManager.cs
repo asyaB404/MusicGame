@@ -11,22 +11,32 @@ namespace GamePlay
         [SerializeField] private GameObject[] notePrefabs;
         [SerializeField] private Transform[] keysParents;
         [SerializeField] private HitBox[] hitBoxes;
-        [SerializeField] private List<int> curNotesGobjIndexList = new(GameManager.KeysCount);
-        private readonly List<Queue<GameObject>> _notesGobjQueues = new(GameManager.KeysCount);
+        [SerializeField] private List<int> curNotesGobjIndexList;
+        private List<Queue<GameObject>> _notesGobjQueues;
         public float speed;
         [SerializeField] private float preSpawnTime;
         [SerializeField] private float noteSpeed;
+        private Dictionary<Collider, int> _keyToPos;
+        public IReadOnlyDictionary<Collider, int> KeyToPos => _keyToPos;
 
         public void StateReset()
         {
             preSpawnTime = 5 / speed;
             noteSpeed = 3.7f / preSpawnTime;
-            curNotesGobjIndexList.Clear();
-            _notesGobjQueues.Clear();
+            curNotesGobjIndexList = new(GameManager.KeysCount);
+            _notesGobjQueues = new(GameManager.KeysCount);
+            _keyToPos = new(GameManager.KeysCount);
             for (int i = 0; i < GameManager.KeysCount; i++)
             {
                 curNotesGobjIndexList.Add(0);
                 _notesGobjQueues.Add(new Queue<GameObject>());
+            }
+
+            int j = 0;
+            foreach (var collider in GetComponentsInChildren<Collider>())
+            {
+                _keyToPos.Add(collider, j);
+                j++;
             }
         }
 
@@ -79,11 +89,11 @@ namespace GamePlay
             var startPos = new Vector3(0, 4 - offset * noteSpeed);
 
             // 生成音符对象
-            GameObject noteObj = Instantiate(notePrefabs[i], keysParents[pos], false);
+            GameObject noteObj = Instantiate(notePrefabs[i], keysParents[pos]);
             noteObj.transform.localPosition = startPos;
 
             // 音符移动动画
-            noteObj.transform.DOLocalMoveY(-400, noteSpeed / 2).SetSpeedBased();
+            noteObj.transform.DOMoveY(-400, noteSpeed / 2).SetSpeedBased();
             noteObj.name = noteIndex.ToString();
 
             _notesGobjQueues[pos].Enqueue(noteObj);

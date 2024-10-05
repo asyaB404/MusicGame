@@ -9992,6 +9992,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: groundHitBox
       objectReference: {fileID: 0}
+    - target: {fileID: 850781624278327966, guid: a79a206516b156d4091f283fba4c05a5, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 8221536029105156095, guid: a79a206516b156d4091f283fba4c05a5, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.9
