@@ -6,5 +6,9 @@ namespace GamePlay.Notes
         public TapNote(float beat, int pos) : base(beat, pos)
         {
         }
+
+        public TapNote(float beat, int pos, bool auto) : base(beat, pos, auto)
+        {
+        }
     }
 }

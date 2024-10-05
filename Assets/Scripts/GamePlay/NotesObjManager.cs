@@ -13,11 +13,13 @@ namespace GamePlay
         [SerializeField] private List<int> curNotesGobjIndexList = new(GameManager.KeysCount);
         private readonly List<Queue<GameObject>> _notesGobjQueues = new(GameManager.KeysCount);
         public float speed;
-        private float _spawnTime;
+        private float _preSpawnTime;
+        private float _noteSpeed;
 
         public void StateReset()
         {
-            _spawnTime = 5 / speed;
+            _preSpawnTime = 5 / speed;
+            _noteSpeed = 3.7f / _preSpawnTime;
             curNotesGobjIndexList.Clear();
             _notesGobjQueues.Clear();
             for (int i = 0; i < GameManager.KeysCount; i++)
@@ -46,14 +48,16 @@ namespace GamePlay
 
         private void SpawnNotes(int pos, List<Note> notes, ref int currentNoteIndex)
         {
+            float adjustedCurBeat = GameManager.CurBeat + _preSpawnTime * (GameManager.Bpm / 60);
             while (currentNoteIndex < notes.Count &&
-                   GameManager.CurBeat + _spawnTime >= notes[currentNoteIndex].beat)
+                   adjustedCurBeat >= notes[currentNoteIndex].beat)
             {
                 var curChartNote = notes[currentNoteIndex];
+                float offset = (adjustedCurBeat - notes[currentNoteIndex].beat) * (60 / GameManager.Bpm);
 
                 if (curChartNote is not ChartEvent)
                 {
-                    SpawnNoteObject(pos, curChartNote, currentNoteIndex);
+                    SpawnNoteObject(pos, curChartNote, currentNoteIndex, offset);
                 }
 
                 currentNoteIndex++;
@@ -62,7 +66,7 @@ namespace GamePlay
             curNotesGobjIndexList[pos] = currentNoteIndex; // 更新索引
         }
 
-        private void SpawnNoteObject(int pos, Note note, int noteIndex)
+        private void SpawnNoteObject(int pos, Note note, int noteIndex, float offset = 0)
         {
             // 使用 switch 来根据不同音符类型获取预制体索引
             var i = note switch
@@ -71,15 +75,14 @@ namespace GamePlay
                 // SoundNote => 1, // SoundNote 类型
                 _ => 0 // ???
             };
-
-            var startPos = new Vector3(0, 4);
+            var startPos = new Vector3(0, 4 - offset * _noteSpeed);
 
             // 生成音符对象
             GameObject noteObj = Instantiate(notePrefabs[i], keysParents[pos], false);
             noteObj.transform.localPosition = startPos;
 
             // 音符移动动画
-            noteObj.transform.DOLocalMoveY(-4, 3.7f / _spawnTime).SetSpeedBased();
+            noteObj.transform.DOLocalMoveY(-4, _noteSpeed).SetSpeedBased();
             noteObj.name = noteIndex.ToString();
 
             _notesGobjQueues[pos].Enqueue(noteObj);
@@ -89,7 +92,6 @@ namespace GamePlay
         {
             while (_notesGobjQueues[pos].Count > 0 && _notesGobjQueues[pos].Peek().transform.localPosition.y <= 0)
             {
-                Debug.Log("destroy");
                 Destroy(_notesGobjQueues[pos].Dequeue());
             }
         }
@@ -103,7 +105,7 @@ namespace GamePlay
             Destroy(noteObj);
         }
 
-        public void PlayEffect(int pos,int color)
+        public void PlayEffect(int pos, int color)
         {
             hitBoxes[pos].PlayEffect(color);
         }

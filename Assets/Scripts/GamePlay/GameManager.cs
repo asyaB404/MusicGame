@@ -38,6 +38,8 @@ namespace GamePlay
         /// </summary>
         [SerializeField] private float bpm;
 
+        public static float Bpm => Instance.bpm;
+
 
         /// <summary>
         /// 当前位于的节拍
@@ -104,7 +106,6 @@ namespace GamePlay
                 while (_canHitNotesQueues[pos].Count > 0 &&
                        _canHitNotesQueues[pos].Peek().beat + noteMissRange * (bpm / 60) <= curBeat)
                 {
-                    Debug.Log("miss");
                     _canHitNotesQueues[pos].Dequeue();
                 }
             }
@@ -158,6 +159,9 @@ namespace GamePlay
 
             switch (note)
             {
+                case TapNote tapNote:
+                    NotesObjManager.Instance.PlayEffect(pos, 0);
+                    break;
                 case SoundNote soundNote:
                     Debug.Log("位于轨道" + pos + "的" + soundNote.soundType);
                     break;
@@ -174,7 +178,6 @@ namespace GamePlay
         /// 手动击打音符的判定逻辑，优先处理队列首位的音符
         /// </summary>
         /// <param name="pos">轨道位置</param>
-        /// <param name="delay">延迟执行时间</param>
         public void ResolveNote(int pos = 0)
         {
             if (_canHitNotesQueues?[pos] == null ||
