@@ -98,7 +98,7 @@ public class TouchSystem : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            handlePos = NotesObjManager.Instance.KeyToPos[hit.collider];
+            NotesObjManager.Instance.KeyToPos?.TryGetValue(hit.collider, out handlePos);
             Debug.Log(handlePos);
         }
 
