@@ -5,7 +5,7 @@ namespace GamePlay.Notes
     {
         public float targetBpm;
 
-        public ChangeBpmNote(float beat, int pos, float targetBpm) : base(beat, pos)
+        public ChangeBpmNote(float beat, float targetBpm) : base(beat)
         {
             this.targetBpm = targetBpm;
         }

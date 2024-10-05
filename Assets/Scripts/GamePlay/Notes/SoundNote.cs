@@ -5,12 +5,12 @@ namespace GamePlay.Notes
     {
         public SoundType soundType;
 
-        public SoundNote(float beat, int pos) : base(beat, pos, true)
+        public SoundNote(float beat) : base(beat, true)
         {
             this.soundType = SoundType.Tick;
         }
 
-        public SoundNote(float beat, int pos, SoundType soundType) : base(beat, pos, true)
+        public SoundNote(float beat, SoundType soundType) : base(beat, true)
         {
             this.soundType = soundType;
         }

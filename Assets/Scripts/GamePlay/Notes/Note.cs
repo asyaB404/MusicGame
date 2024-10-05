@@ -5,19 +5,16 @@ namespace GamePlay.Notes
     {
         public int id;
         public float beat;
-        public int pos;
         public bool auto;
 
-        protected Note(float beat, int pos)
+        protected Note(float beat)
         {
             this.beat = beat;
-            this.pos = pos;
         }
         
-        protected Note(float beat, int pos, bool auto)
+        protected Note(float beat,bool auto)
         {
             this.beat = beat;
-            this.pos = pos;
             this.auto = auto;
         }
 

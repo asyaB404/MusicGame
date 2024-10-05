@@ -20,6 +20,13 @@ public class ChartManager : MonoManager<ChartManager>
         chart = Chart.SampleChart();
         GameManager.Instance.StartGame();
     }
+    
+    [ContextMenu("sampleStart2")]
+    private void TestStart2()
+    {
+        chart = Chart.SampleChart2();
+        GameManager.Instance.StartGame();
+    }
 
     #endregion
 }

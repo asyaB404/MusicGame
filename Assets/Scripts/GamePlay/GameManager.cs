@@ -67,7 +67,7 @@ namespace GamePlay
         public void Start()
         {
             // 不知道为什么手机锁30帧，加了这个能改善，但是锁60
-            Application.targetFrameRate = 120;
+            Application.targetFrameRate = 240;
         }
 
         private void Update()
