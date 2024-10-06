@@ -22,17 +22,17 @@ namespace GamePlay
         public void StateReset()
         {
             preSpawnTime = 5 / speed;
-            noteSpeed = 3.7f / preSpawnTime;
-            curNotesGobjIndexList = new(GameManager.KeysCount);
-            _notesGobjQueues = new(GameManager.KeysCount);
-            _keyToPos = new(GameManager.KeysCount);
+            noteSpeed = 4f / preSpawnTime;
+            curNotesGobjIndexList = new List<int>(GameManager.KeysCount);
+            _notesGobjQueues = new List<Queue<GameObject>>(GameManager.KeysCount);
+            _keyToPos = new Dictionary<Collider, int>(GameManager.KeysCount);
             for (int i = 0; i < GameManager.KeysCount; i++)
             {
                 curNotesGobjIndexList.Add(0);
                 _notesGobjQueues.Add(new Queue<GameObject>());
             }
 
-            int j = 0;
+            var j = 0;
             foreach (var collider in GetComponentsInChildren<Collider>())
             {
                 _keyToPos.Add(collider, j);
