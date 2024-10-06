@@ -22,7 +22,7 @@ namespace GamePlay
         public void StateReset()
         {
             preSpawnTime = 5 / speed;
-            noteSpeed = 4f / preSpawnTime;
+            noteSpeed = 3.7f / preSpawnTime;
             curNotesGobjIndexList = new List<int>(GameManager.KeysCount);
             _notesGobjQueues = new List<Queue<GameObject>>(GameManager.KeysCount);
             _keyToPos = new Dictionary<Collider, int>(GameManager.KeysCount);
@@ -86,7 +86,7 @@ namespace GamePlay
                 // SoundNote => 1, // SoundNote 类型
                 _ => 0 // ???
             };
-            var startPos = new Vector3(0, 4 - offset * noteSpeed);
+            var startPos = new Vector3(0, 3.7f - offset * noteSpeed);
 
             // 生成音符对象
             GameObject noteObj = Instantiate(notePrefabs[i], keysParents[pos]);

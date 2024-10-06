@@ -99,13 +99,7 @@ public class TouchSystem : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             NotesObjManager.Instance.KeyToPos?.TryGetValue(hit.collider, out handlePos);
-            Debug.Log(handlePos);
         }
-
-        // if (touch.position.x < Screen.width / 2f)
-        //     handlePos = 0;
-        // else
-        //     handlePos = 1;
         switch (touch.phase)
         {
             case TouchPhase.Began:
