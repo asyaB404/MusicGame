@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using GamePlay.Notes;
 
-
+/// <summary>
+/// 谱面类
+/// </summary>
 [System.Serializable]
 public class Chart
 {
@@ -13,6 +15,10 @@ public class Chart
     public List<List<Note>> notes = new();
 
 
+    /// <summary>
+    /// 样例谱面一
+    /// </summary>
+    /// <returns></returns>
     public static Chart SampleChart()
     {
         Chart chart = new Chart
@@ -34,6 +40,10 @@ public class Chart
         return chart;
     }
 
+    /// <summary>
+    /// 样例谱面二
+    /// </summary>
+    /// <returns></returns>
     public static Chart SampleChart2()
     {
         Chart chart = new Chart
@@ -64,6 +74,12 @@ public class Chart
         return chart;
     }
 
+    /// <summary>
+    /// 测试用，一次添加七个音符
+    /// </summary>
+    /// <param name="notes"></param>
+    /// <param name="start"></param>
+    /// <param name="duration"></param>
     private static void AddTap7_th(IList<Note> notes, float start = 0, float duration = 1)
     {
         for (int i = 0; i < 6; i++)

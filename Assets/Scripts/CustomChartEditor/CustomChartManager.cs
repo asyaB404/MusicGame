@@ -5,6 +5,9 @@ using UnityEngine.Serialization;
 
 namespace CustomChartEditor
 {
+    /// <summary>
+    /// 自定义谱面编辑器
+    /// </summary>
     public class CustomChartManager : MonoManager<CustomChartManager>
     {
         [SerializeField] private float offset;

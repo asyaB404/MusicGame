@@ -1,5 +1,8 @@
 namespace GamePlay.Notes
 {
+    /// <summary>
+    /// 音效类Note，自动处理音符，用于打节拍提示用
+    /// </summary>
     [System.Serializable]
     public class SoundNote : Note
     {

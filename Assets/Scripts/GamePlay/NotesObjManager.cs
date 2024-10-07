@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using DG.Tweening;
 using GamePlay.Notes;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace GamePlay
 {

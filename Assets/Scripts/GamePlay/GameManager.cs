@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace GamePlay
 {
+    /// <summary>
+    /// 负责管理游戏状态和音符判定队列
+    /// </summary>
     public class GameManager : MonoManager<GameManager>
     {
         /// <summary>

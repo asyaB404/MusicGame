@@ -100,6 +100,7 @@ public class TouchSystem : MonoBehaviour
         {
             NotesObjManager.Instance.KeyToPos?.TryGetValue(hit.collider, out handlePos);
         }
+
         switch (touch.phase)
         {
             case TouchPhase.Began:

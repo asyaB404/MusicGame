@@ -1,5 +1,8 @@
 namespace GamePlay.Notes
 {
+    /// <summary>
+    /// 变换Bpm事件
+    /// </summary>
     [System.Serializable]
     public class ChangeBpmNote : ChartEvent
     {
