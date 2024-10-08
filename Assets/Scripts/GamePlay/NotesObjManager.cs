@@ -10,6 +10,8 @@ namespace GamePlay
         [SerializeField] private GameObject[] notePrefabs;
         [SerializeField] private Transform[] keysParents;
         [SerializeField] private HitBox[] hitBoxes;
+        [SerializeField] private GameObject[] touching;
+        public IReadOnlyList<GameObject> Touching => touching;
         [SerializeField] private List<int> curNotesGobjIndexList;
         private List<Queue<GameObject>> _notesGobjQueues;
         public float speed;

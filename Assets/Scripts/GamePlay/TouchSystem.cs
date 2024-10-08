@@ -4,6 +4,9 @@ using DG.Tweening;
 using GamePlay;
 using UnityEngine;
 
+/// <summary>
+/// 负责管理触摸
+/// </summary>
 public class TouchSystem : MonoBehaviour
 {
     private Vector2 _lastPos = Vector2.zero;
@@ -14,7 +17,6 @@ public class TouchSystem : MonoBehaviour
     public bool openTouchPrefab;
 
     [SerializeField] private GameObject touchPrefab;
-    private readonly List<Touch> _nowTouches = new();
     private readonly Dictionary<int, GameObject> _touchObjsDict = new();
 
 
@@ -93,14 +95,13 @@ public class TouchSystem : MonoBehaviour
             touchWorldPos.z = 0;
         }
 
-        int handlePos = 0;
+        int handlePos = -1;
         Ray ray = Camera.main.ScreenPointToRay(touch.position);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
-        {
+        if (Physics.Raycast(ray, out var hit))
             NotesObjManager.Instance.KeyToPos?.TryGetValue(hit.collider, out handlePos);
-        }
-
+        if (handlePos is >= 0 and <= 3)
+            NotesObjManager.Instance.Touching[handlePos].SetActive(touch.phase != TouchPhase.Ended);
+        
         switch (touch.phase)
         {
             case TouchPhase.Began:
@@ -129,7 +130,6 @@ public class TouchSystem : MonoBehaviour
 
     private void SpawnTouch(Touch touch, Vector2 worldPos)
     {
-        _nowTouches.Add(touch);
         if (!openTouchPrefab) return;
         GameObject o = Instantiate(touchPrefab, worldPos, Quaternion.identity);
         o.transform.localScale = Vector3.zero;
@@ -139,7 +139,6 @@ public class TouchSystem : MonoBehaviour
 
     private void RemoveTouch(Touch touch)
     {
-        _nowTouches.Remove(touch);
         if (!openTouchPrefab) return;
         GameObject curTouchObj = _touchObjsDict[touch.fingerId];
         curTouchObj.GetComponent<SpriteRenderer>().DOFade(0, 0.1f).OnComplete(() => { Destroy(curTouchObj); });

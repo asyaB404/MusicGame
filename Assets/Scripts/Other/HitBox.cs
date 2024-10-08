@@ -6,14 +6,14 @@ public class HitBox : MonoBehaviour
     [SerializeField] private ParticleSystem effect;
     [SerializeField] private Color perfect;
     [SerializeField] private Color great;
-    [SerializeField] private int state = 0;
+    [SerializeField] private int colorState = 0;
 
     public void PlayEffect(int color = 0)
     {
-        if (color != state)
+        if (color != colorState)
         {
             UpdateParticleColor(color);
-            state = color;
+            colorState = color;
         }
 
         effect.Play();

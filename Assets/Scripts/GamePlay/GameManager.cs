@@ -183,6 +183,7 @@ namespace GamePlay
         /// <param name="pos">轨道位置</param>
         public void ResolveNote(int pos = 0)
         {
+            if (pos == -1) return;
             if (_canHitNotesQueues?[pos] == null ||
                 _canHitNotesQueues[pos].Count <= 0) return;
             Note note = _canHitNotesQueues[pos].Dequeue();
