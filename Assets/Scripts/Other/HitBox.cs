@@ -1,12 +1,26 @@
+using System;
 using UnityEngine;
 
 
 public class HitBox : MonoBehaviour
 {
+    public bool isTouching;
+    [SerializeField] private GameObject touching;
     [SerializeField] private ParticleSystem effect;
     [SerializeField] private Color perfect;
     [SerializeField] private Color great;
     [SerializeField] private int colorState = 0;
+
+    private void Update()
+    {
+        if (touching && isTouching != touching.activeSelf)
+            touching.SetActive(isTouching);
+    }
+
+    private void LateUpdate()
+    {
+        isTouching = false;
+    }
 
     public void PlayEffect(int color = 0)
     {

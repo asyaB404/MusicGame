@@ -98,10 +98,16 @@ public class TouchSystem : MonoBehaviour
         int handlePos = -1;
         Ray ray = Camera.main.ScreenPointToRay(touch.position);
         if (Physics.Raycast(ray, out var hit))
-            NotesObjManager.Instance.KeyToPos?.TryGetValue(hit.collider, out handlePos);
-        if (handlePos is >= 0 and <= 3)
-            NotesObjManager.Instance.Touching[handlePos].SetActive(touch.phase != TouchPhase.Ended);
-        
+        {
+            if (hit.collider != null)
+            {
+                if (NotesObjManager.Instance.KeyToPos?.TryGetValue(hit.collider, out handlePos) == true)
+                    NotesObjManager.Instance.HitBoxes[handlePos].isTouching =
+                        touch.phase is not (TouchPhase.Ended or TouchPhase.Canceled);
+            }
+        }
+
+
         switch (touch.phase)
         {
             case TouchPhase.Began:
@@ -110,10 +116,7 @@ public class TouchSystem : MonoBehaviour
                 break;
             case TouchPhase.Moved:
                 if (openTouchPrefab)
-                {
                     _touchObjsDict[touch.fingerId].transform.position = touchWorldPos;
-                }
-
                 break;
             case TouchPhase.Ended:
                 RemoveTouch(touch);

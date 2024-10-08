@@ -340,10 +340,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a7253835a782d946a1acc35f46ae16f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTouching: 0
+  touching: {fileID: 5224580534395338645}
   effect: {fileID: 2988044606013611925}
   perfect: {r: 0, g: 0.74347997, b: 1, a: 1}
   great: {r: 0.10273957, g: 1, b: 0, a: 1}
-  state: 0
+  colorState: 0
   debugI: 0
 --- !u!4 &5191189808718495758 stripped
 Transform:

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using GamePlay.Notes;
@@ -10,8 +11,7 @@ namespace GamePlay
         [SerializeField] private GameObject[] notePrefabs;
         [SerializeField] private Transform[] keysParents;
         [SerializeField] private HitBox[] hitBoxes;
-        [SerializeField] private GameObject[] touching;
-        public IReadOnlyList<GameObject> Touching => touching;
+        public IReadOnlyList<HitBox> HitBoxes => hitBoxes;
         [SerializeField] private List<int> curNotesGobjIndexList;
         private List<Queue<GameObject>> _notesGobjQueues;
         public float speed;
@@ -57,6 +57,7 @@ namespace GamePlay
                 CleanupNotes(pos);
             }
         }
+        
 
         private void SpawnNotes(int pos, List<Note> notes, ref int currentNoteIndex)
         {
