@@ -2641,6 +2641,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: skyKey
       objectReference: {fileID: 0}
+    - target: {fileID: 3498311176615120341, guid: 398fe48e3782fa84381c985b3fabfbd9, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3967777310233314630, guid: 398fe48e3782fa84381c985b3fabfbd9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
