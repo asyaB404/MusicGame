@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using Framework;
 using GamePlay;
 using UnityEngine;
 
@@ -88,18 +89,16 @@ public class TouchSystem : MonoBehaviour
 
     private void HandleTouch(Touch touch)
     {
-        Vector3 touchWorldPos = Vector3.zero;
-        if (Camera.main != null)
-        {
-            touchWorldPos = Camera.main.ScreenToWorldPoint(touch.position);
-            touchWorldPos.z = 0;
-        }
+        var mainCamera = CameraManager.Main;
+        if (mainCamera == null) return;
+        Vector3 touchWorldPos = mainCamera.ScreenToWorldPoint(touch.position);
 
+        touchWorldPos.z = 0;
         int handlePos = -1;
-        Ray ray = Camera.main.ScreenPointToRay(touch.position);
+        Ray ray = mainCamera.ScreenPointToRay(touch.position);
         if (Physics.Raycast(ray, out var hit))
         {
-            if (hit.collider != null)
+            if (hit.collider)
             {
                 if (NotesObjManager.Instance.KeyToPos?.TryGetValue(hit.collider, out handlePos) == true)
                     NotesObjManager.Instance.HitBoxes[handlePos].isTouching =
@@ -118,11 +117,9 @@ public class TouchSystem : MonoBehaviour
                 if (openTouchPrefab)
                     _touchObjsDict[touch.fingerId].transform.position = touchWorldPos;
                 break;
-            case TouchPhase.Ended:
-                RemoveTouch(touch);
-                break;
             case TouchPhase.Stationary:
                 break;
+            case TouchPhase.Ended:
             case TouchPhase.Canceled:
                 RemoveTouch(touch);
                 break;

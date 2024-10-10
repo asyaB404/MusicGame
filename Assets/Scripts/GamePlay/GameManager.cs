@@ -118,6 +118,10 @@ namespace GamePlay
                     curNotesIndexList[pos]++;
                 }
 
+                // while (_canHoldNotesQueues[pos].Count > 0 && _canHoldNotesQueues[pos].Peek().Item2 )
+                // {
+                //     
+                // }
                 // 检查可打击的音符中是否有Miss，有则移除
                 while (_canHitTapNotesQueues[pos].Count > 0 &&
                        _canHitTapNotesQueues[pos].Peek().beat + noteMissRange * (bpm / 60f) <= curBeat)
