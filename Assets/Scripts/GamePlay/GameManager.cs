@@ -66,7 +66,7 @@ namespace GamePlay
         /// </summary>
         private List<Queue<Note>> _canHitTapNotesQueues;
 
-        private List<Queue<(float, float)>> _canHoldNotesQueues;
+        private List<Queue<(float startBeat, float endBeat, float totalHoldTimer)>> _canHoldNotesQueues;
 
         public void Start()
         {
@@ -103,7 +103,7 @@ namespace GamePlay
                         {
                             case HoldNote holdNote:
                                 _canHoldNotesQueues[pos]
-                                    .Enqueue((holdNote.beat, holdNote.endBeat));
+                                    .Enqueue((holdNote.beat, holdNote.endBeat, 0));
                                 _canHitTapNotesQueues[pos]
                                     .Enqueue(curChartNote);
                                 break;
@@ -118,15 +118,25 @@ namespace GamePlay
                     curNotesIndexList[pos]++;
                 }
 
-                // while (_canHoldNotesQueues[pos].Count > 0 && _canHoldNotesQueues[pos].Peek().Item2 )
-                // {
-                //     
-                // }
                 // 检查可打击的音符中是否有Miss，有则移除
                 while (_canHitTapNotesQueues[pos].Count > 0 &&
                        _canHitTapNotesQueues[pos].Peek().beat + noteMissRange * (bpm / 60f) <= curBeat)
                 {
                     _canHitTapNotesQueues[pos].Dequeue();
+                }
+
+                while (_canHoldNotesQueues[pos].Count > 0 &&
+                       _canHoldNotesQueues[pos].Peek().endBeat <= curBeat)
+                {
+                    _canHoldNotesQueues[pos].Dequeue();
+                }
+
+                foreach (var item in _canHoldNotesQueues[pos])
+                {
+                    if (!NotesObjManager.Instance.HitBoxes[pos].isTouching)
+                    {
+                        Debug.LogWarning("hold断了");
+                    }
                 }
             }
 
@@ -157,12 +167,12 @@ namespace GamePlay
             curBeat = 0;
             curNotesIndexList = new List<int>(KeysCount);
             _canHitTapNotesQueues = new List<Queue<Note>>(KeysCount);
-            _canHoldNotesQueues = new List<Queue<(float, float)>>(KeysCount);
+            _canHoldNotesQueues = new List<Queue<(float, float, float)>>(KeysCount);
             for (int i = 0; i < KeysCount; i++)
             {
                 curNotesIndexList.Add(0);
                 _canHitTapNotesQueues.Add(new Queue<Note>());
-                _canHoldNotesQueues.Add(new Queue<(float, float)>());
+                _canHoldNotesQueues.Add(new Queue<(float, float, float)>());
             }
 
             NotesObjManager.Instance.StateReset();

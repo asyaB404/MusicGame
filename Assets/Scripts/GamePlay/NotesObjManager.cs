@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using GamePlay.Notes;
@@ -57,7 +56,7 @@ namespace GamePlay
                 CleanupNotes(pos);
             }
         }
-        
+
 
         private void SpawnNotes(int pos, List<Note> notes, ref int currentNoteIndex)
         {
