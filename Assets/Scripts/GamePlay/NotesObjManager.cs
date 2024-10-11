@@ -33,7 +33,7 @@ namespace GamePlay
             }
 
             var j = 0;
-            foreach (var collider in GetComponentsInChildren<Collider>())
+            foreach (var collider in GetComponentsInChildren<Collider>(true))
             {
                 _keyToPos.Add(collider, j);
                 j++;
