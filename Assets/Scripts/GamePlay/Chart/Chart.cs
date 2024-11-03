@@ -84,7 +84,7 @@ public class Chart
     {
         for (int i = 0; i < 6; i++)
         {
-            notes.Add(new TapNote(start + duration * i));
+            notes.Add(new TapNote(start + duration * i, true));
         }
 
         notes.Add(new TapNote(start + duration * 6));
