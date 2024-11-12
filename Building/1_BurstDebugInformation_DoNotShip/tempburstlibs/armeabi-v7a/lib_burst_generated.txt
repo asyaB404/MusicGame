@@ -12,6 +12,8 @@ Library: D:\unity_project\Hello\MusicGame\Temp\BurstOutput\tempburstlibs\armeabi
 --assembly-defines=Assembly-CSharp;
 --assembly-defines=Unity.2D.IK.Runtime;
 --assembly-defines=Unity.RenderPipelines.Core.Runtime;
+--assembly-defines=Unity.ResourceManager;
+--assembly-defines=Unity.ScriptableBuildPipeline;
 --assembly-defines=Unity.RenderPipelines.Universal.Config.Runtime;
 --assembly-defines=Unity.VisualScripting.Flow;
 --assembly-defines=Unity.RenderPipelines.Core.ShaderLibrary;
@@ -37,6 +39,7 @@ Library: D:\unity_project\Hello\MusicGame\Temp\BurstOutput\tempburstlibs\armeabi
 --assembly-defines=Unity.RenderPipelines.Universal.Shaders;
 --assembly-defines=UniTask;
 --assembly-defines=Unity.VisualScripting.State;
+--assembly-defines=Unity.Addressables;
 --assembly-defines=Unity.Collections.LowLevel.ILSupport;
 --assembly-defines=SonicBloom.MIDI;
 --assembly-defines=DOTween;
@@ -124,6 +127,8 @@ Library: D:\unity_project\Hello\MusicGame\Temp\BurstOutput\tempburstlibs\armeabi
 --assembly-defines=Assembly-CSharp;
 --assembly-defines=Unity.2D.IK.Runtime;
 --assembly-defines=Unity.RenderPipelines.Core.Runtime;
+--assembly-defines=Unity.ResourceManager;
+--assembly-defines=Unity.ScriptableBuildPipeline;
 --assembly-defines=Unity.RenderPipelines.Universal.Config.Runtime;
 --assembly-defines=Unity.VisualScripting.Flow;
 --assembly-defines=Unity.RenderPipelines.Core.ShaderLibrary;
@@ -149,6 +154,7 @@ Library: D:\unity_project\Hello\MusicGame\Temp\BurstOutput\tempburstlibs\armeabi
 --assembly-defines=Unity.RenderPipelines.Universal.Shaders;
 --assembly-defines=UniTask;
 --assembly-defines=Unity.VisualScripting.State;
+--assembly-defines=Unity.Addressables;
 --assembly-defines=Unity.Collections.LowLevel.ILSupport;
 --assembly-defines=SonicBloom.MIDI;
 --assembly-defines=DOTween;

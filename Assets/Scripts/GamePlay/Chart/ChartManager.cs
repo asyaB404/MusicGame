@@ -15,14 +15,14 @@ public class ChartManager : MonoManager<ChartManager>
     #region Debug
 
     [ContextMenu("sampleStart")]
-    private void TestStart()
+    public void TestStart()
     {
         chart = Chart.SampleChart();
         GameManager.Instance.StartGame();
     }
     
     [ContextMenu("sampleStart2")]
-    private void TestStart2()
+    public void TestStart2()
     {
         chart = Chart.SampleChart2();
         GameManager.Instance.StartGame();

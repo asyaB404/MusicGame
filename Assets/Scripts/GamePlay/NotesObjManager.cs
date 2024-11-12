@@ -94,7 +94,7 @@ namespace GamePlay
             noteObj.transform.localPosition = startPos;
 
             // 音符移动动画
-            noteObj.transform.DOMoveY(-400, noteSpeed / 2).SetSpeedBased();
+            noteObj.transform.DOLocalMoveY(-400, noteSpeed / 2).SetSpeedBased();
             noteObj.name = noteIndex.ToString();
 
             _notesGobjQueues[pos].Enqueue(noteObj);

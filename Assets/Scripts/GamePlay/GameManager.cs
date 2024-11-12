@@ -11,6 +11,8 @@ namespace GamePlay
     /// </summary>
     public class GameManager : MonoManager<GameManager>
     {
+        #region 字段
+
         /// <summary>
         /// 表示轨道数量
         /// </summary>
@@ -68,10 +70,15 @@ namespace GamePlay
 
         private List<Queue<(float startBeat, float endBeat, float totalHoldTimer)>> _canHoldNotesQueues;
 
-        public void Start()
+        #endregion
+
+        public async void Start()
         {
-            // 不知道为什么手机锁30帧，加了这个能改善，但是锁60
-            Application.targetFrameRate = 240;
+            Application.targetFrameRate = 9999;
+            QualitySettings.vSyncCount = 0;
+            await UniTask.Delay(System.TimeSpan.FromSeconds(3));
+            ChartManager.Instance.TestStart2();
+            
         }
 
         private void Update()
@@ -94,7 +101,7 @@ namespace GamePlay
                     if (curChartNote.auto)
                     {
                         // 处理自动播放音符
-                        ResolveAutoNote(curChartNote, 0, curChartNote.beat - curBeat);
+                        ResolveAutoNote(curChartNote, pos, curChartNote.beat - curBeat);
                     }
                     else
                     {
