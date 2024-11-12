@@ -192,7 +192,7 @@ MonoBehaviour:
   - {fileID: 2097226833}
   - {fileID: 865815908}
   curNotesGobjIndexList: 
-  speed: 3
+  speed: 10
   preSpawnTime: 0
   noteSpeed: 0
 --- !u!4 &31419850 stripped
@@ -2365,10 +2365,6 @@ PrefabInstance:
     - target: {fileID: 1047672520939527626, guid: 7440e1e34c183fa479d3b2bf04d0fb3e, type: 3}
       propertyPath: m_Name
       value: tapNote
-      objectReference: {fileID: 0}
-    - target: {fileID: 1047672520939527626, guid: 7440e1e34c183fa479d3b2bf04d0fb3e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5414991763715770014, guid: 7440e1e34c183fa479d3b2bf04d0fb3e, type: 3}
       propertyPath: m_LocalPosition.x
