@@ -89,7 +89,11 @@ namespace GamePlay
                     break;
                 case HoldNote holdNote:
                     noteObj = Instantiate(notePrefabs[0], keysParents[pos]);
+                    var t = (holdNote.endBeat - holdNote.beat) * (60f / GameManager.Bpm);
                     var holdLine = Instantiate(notePrefabs[1], noteObj.transform);
+                    var spriteRenderer = holdLine.GetComponent<SpriteRenderer>();
+                    Vector2 size = spriteRenderer.size;
+                    spriteRenderer.size = new(noteSpeed * t, size.y);
                     break;
             }
             noteObj.transform.localPosition = startPos;

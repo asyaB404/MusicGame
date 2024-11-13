@@ -173,6 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   notePrefabs:
   - {fileID: 1047672520939527626, guid: 7440e1e34c183fa479d3b2bf04d0fb3e, type: 3}
+  - {fileID: 6912311355940888480, guid: 6ee604c11c10e464396a76fd17fc5bff, type: 3}
   keysParents:
   - {fileID: 1872124184}
   - {fileID: 1686550355}
