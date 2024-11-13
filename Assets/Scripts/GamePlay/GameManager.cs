@@ -57,6 +57,7 @@ namespace GamePlay
         /// 计时器，记录当前的时间
         /// </summary>
         [SerializeField] private float timer;
+        public static float CurTimer => Instance.timer;
 
         /// <summary>
         /// 从0开始，每个轨道将要加入的音符下标，添加的速度和范围取决于noteMissRange

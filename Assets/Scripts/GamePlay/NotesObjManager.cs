@@ -22,7 +22,7 @@ namespace GamePlay
         public void StateReset()
         {
             preSpawnTime = 5 / speed;
-            noteSpeed = 3.7f / preSpawnTime;
+            noteSpeed = 3.7f * speed / 5;
             curNotesGobjIndexList = new List<int>(GameManager.KeysCount);
             _notesGobjQueues = new List<Queue<GameObject>>(GameManager.KeysCount);
             _keyToPos = new Dictionary<Collider, int>(GameManager.KeysCount);
@@ -80,20 +80,19 @@ namespace GamePlay
 
         private void SpawnNoteObject(int pos, Note note, int noteIndex, float offset = 0)
         {
-            // 使用 switch 来根据不同音符类型获取预制体索引
-            var i = note switch
-            {
-                TapNote => 0, // TapNote 类型
-                // SoundNote => 1, // SoundNote 类型
-                _ => 0 // ???
-            };
             var startPos = new Vector3(0, 3.7f - offset * noteSpeed);
-
-            // 生成音符对象
-            GameObject noteObj = Instantiate(notePrefabs[i], keysParents[pos]);
+            GameObject noteObj = null;
+            switch (note)
+            {
+                case TapNote tapNote:
+                    noteObj = Instantiate(notePrefabs[0], keysParents[pos]);
+                    break;
+                case HoldNote holdNote:
+                    noteObj = Instantiate(notePrefabs[0], keysParents[pos]);
+                    var holdLine = Instantiate(notePrefabs[1], noteObj.transform);
+                    break;
+            }
             noteObj.transform.localPosition = startPos;
-
-            // 音符移动动画
             noteObj.transform.DOLocalMoveY(-400, noteSpeed / 2).SetSpeedBased();
             noteObj.name = noteIndex.ToString();
 
